@@ -1,0 +1,32 @@
+<div id="result"></div>
+
+<script>
+
+let newStudent = {
+  "name" : "이순신",
+  "major" : "해양공학",
+  "grade" : 4
+};
+
+let xhr = new XMLHttpRequest();
+xhr.open("GET", "students.json");
+xhr.send();
+
+xhr.onreadystatechange = function () {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    let students = JSON.parse(xhr.responseText);
+    // add the new student to the array
+    students.push(newStudent);
+    // write the updated array back to the file
+    let updatedData = JSON.stringify(students);
+    let file = new Blob([updatedData], {type: "application/json"});
+    let a = document.createElement("a");
+    a.href = URL.createObjectURL(file);
+    a.download = "students.json";
+    a.click();
+    // display the updated JSON data in the result div
+    document.getElementById("result").innerHTML = updatedData;
+  }
+};
+
+</script>
