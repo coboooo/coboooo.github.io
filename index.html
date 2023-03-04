@@ -33,8 +33,10 @@
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
-    firebase.analytics();
     const analytics = firebase.analytics();
+    if (firebase.analytics.isSupported()) {
+        firebase.analytics();
+    }
 </script>
 
 <script>
