@@ -5,7 +5,7 @@ var $messages = $('.messages-content'),
 var myName = "";
 
 $(window).load(function() {
-  myName = prompt("Enter your name");
+  myName = '111';
   $messages.mCustomScrollbar();
 
   firebase.database().ref("messages").on("child_added", function (snapshot) {
