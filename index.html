@@ -45,7 +45,6 @@
   <div id="user-id-container"></div>
   <button id="logout-button" style="display:none">Logout</button>
   <button id="google-login-button">Sign in with Google</button>
-  </div>
 
   <script>
     $(document).ready(function () {
@@ -70,21 +69,21 @@
       });
 
       // Handle the logout button click event
-      $('#logout-button').click(function () {
-        firebase.auth().signOut()
-          .then(function () {
-            // Clear the user ID container and hide the logout button
-            document.getElementById("user-id-container").innerHTML = "";
-            document.getElementById("logout-button").style.display = "none";
-            // Show the login button
-            $('#google-login-button').show();
-          })
-          .catch(function (error) {
-            // Handle errors
-            var errorMessage = error.message;
-            alert(errorMessage);
-          });
-      });
+      // $('#logout-button').click(function () {
+      //   firebase.auth().signOut()
+      //     .then(function () {
+      //       // Clear the user ID container and hide the logout button
+      //       document.getElementById("user-id-container").innerHTML = "";
+      //       document.getElementById("logout-button").style.display = "none";
+      //       // Show the login button
+      //       $('#google-login-button').show();
+      //     })
+      //     .catch(function (error) {
+      //       // Handle errors
+      //       var errorMessage = error.message;
+      //       alert(errorMessage);
+      //     });
+      // });
     });
   </script>
 
