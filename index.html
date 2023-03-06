@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <meta title="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- Include jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    * {
+      font-size: 30px;
+    }
+  </style>
+
+  <!-- Include the Firebase and Google authentication SDKs -->
   <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script> -->
-  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
-    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
 
   <script>
-    // Initialize Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyA-n4dwue7PArKFzBDS8tr4XEBUeRF2GEs",
       authDomain: "fir-c3fbf.firebaseapp.com",
@@ -25,133 +33,76 @@
       appId: "1:121918325916:web:233b0349f524df25779959",
       measurementId: "G-BPHH2CFZYF"
     };
+
     firebase.initializeApp(firebaseConfig);
+    var provider = new firebase.auth.GoogleAuthProvider();
+
   </script>
 
-  <style>
-    * {
-      font-size: 30px;
-    }
-
-    .container {
-      width: 100%;
-      height: 100vh;
-      background: #ffffff;
-    }
-
-    .item {
-      width: 300px;
-    }
-
-    .item1 {
-      background: #ffffff;
-      border: 5px solid #ff0000;
-    }
-
-    .item2 {
-      background: #fff7f7;
-    }
-
-    .messages {
-      background: #ffb2b2;
-      display: flex;
-      margin: 5px;
-    }
-
-    .messageLeft {
-      background: #ffe9ac;
-      margin: 5px;
-      border: 5px solid #292929;
-      width: 40%;
-    }
-
-    .messageRight {
-      background: #d4ffac;
-      margin: 5px;
-      border: 5px solid #292929;
-      width: 30%;
-    }
-  </style>
+</head>
 
 <body>
-  <div class="container">
-    <div class="item item1">
-      <form>
-        <input type="text" id="message-input" placeholder="" autocomplete="off" autofocus>
-      </form>
-    </div>
-    <div class="item item2">
-    </div>
+  <div id="user-id-container"></div>
+  <button id="logout-button" style="display:none">Logout</button>
+  <button id="google-login-button">Sign in with Google</button>
   </div>
 
   <script>
     $(document).ready(function () {
-      var $messageInput = $("#message-input");
-      var $container = $(".item.item2");
-
-      // Reference to the chat messages in Firebase
-      var chatRef = firebase.database().ref("messages");
-
-      var numbers = [];
-      for (var i = 1; i <= 10; i++) {
-        numbers.push(i);
-      }
-      var stringArray = numbers.map(function (num) {
-        return num.toString();
-      });
-
-      console.log(stringArray);
-
-//       var data = `
-// data1
-// data2
-// data3
-// `;
-//       var dataArray = data.split('\n');
-//       dataArray = dataArray.slice(1, -1);
-
-      for (var i = 0; i < stringArray.length; i++) {
-        var message = stringArray[i];
-        var email = 'email';
-        chatRef.push({
-          text: message,
-          email: email
-        });
-      }
-
-      // Listen for key press on input field
-      $messageInput.keypress(function (e) {
-        // Check if Enter key is pressed
-        if (e.keyCode == 13) {
-          // Get message text
-          var message = $(this).val();
-          var email = 'emailemailemail';
-          // Save message to Firebase
-          chatRef.push({
-            text: message,
-            email: email
+      // Handle the Google login button click event
+      $('#google-login-button').click(function () {
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+          .then(function () {
+            return firebase.auth().signInWithPopup(provider);
+          })
+          .then(function (result) {
+            // Display the user ID on the screen
+            $('#user-id-container').text(result.user.email);
+            // Hide the login button and show the logout button
+            $('#google-login-button').hide();
+            $('#logout-button').show();
+          })
+          .catch(function (error) {
+            // Handle errors
+            var errorMessage = error.message;
+            alert(errorMessage);
           });
-          // Clear input field
-          $(this).val("");
-        }
       });
 
-      // Listen for new messages added to Firebase
-      chatRef.on("child_added", function (snapshot) {
-        // Get message data
-        var message = snapshot.val().text;
-        var email = snapshot.val().email;
-        // Escape message and email inputs
-        var escapedMessage = $("<div>").text(message).html();
-        var escapedEmail = $("<div>").text(email).html();
-        // Add message to chat UI
-        $container.append("<div class='messages'><div class='messageLeft'>" + escapedMessage + "</div>" +
-          "<div class='messageRight'>" + escapedEmail + "</div></div>");
-        // Scroll container to bottom
-        $container.scrollTop($container[0].scrollHeight);
+      // Handle the logout button click event
+      $('#logout-button').click(function () {
+        firebase.auth().signOut()
+          .then(function () {
+            // Clear the user ID container and hide the logout button
+            document.getElementById("user-id-container").innerHTML = "";
+            document.getElementById("logout-button").style.display = "none";
+            // Show the login button
+            $('#google-login-button').show();
+          })
+          .catch(function (error) {
+            // Handle errors
+            var errorMessage = error.message;
+            alert(errorMessage);
+          });
       });
     });
-
-
   </script>
+
 </body>
+
+</html>
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      const db = firebase.firestore();
+      db.collection('i_data').get().then((result) => {
+        result.forEach(element => {
+          console.log(element.data())
+          const div = document.createElement("div");
+          div.textContent = element.data().length;
+          document.body.appendChild(div);
+          console.log(result);
+        });
+      });
+    });
+  </script> -->
