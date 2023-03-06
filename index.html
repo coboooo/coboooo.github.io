@@ -1,126 +1,157 @@
+<!DOCTYPE html>
+<html>
+
 <head>
-    <meta title="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/6.6.1/firebase-database.js"></script>
+  <meta title="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+    integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="css/normalize.css">
+  <script>
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-n4dwue7PArKFzBDS8tr4XEBUeRF2GEs",
+      authDomain: "fir-c3fbf.firebaseapp.com",
+      projectId: "fir-c3fbf",
+      storageBucket: "fir-c3fbf.appspot.com",
+      messagingSenderId: "121918325916",
+      appId: "1:121918325916:web:233b0349f524df25779959",
+      measurementId: "G-BPHH2CFZYF"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-    <link rel='stylesheet prefetch' href='https://fonts.googleapis.com/css?family=Open+Sans'>
-    <link rel='stylesheet prefetch'
-        href='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.min.css'>
+  <style>
+    * {
+      font-size: 30px;
+    }
 
-    <link rel="stylesheet" href="css/style.css">
+    .container {
+      width: 100%;
+      height: 100vh;
+      background: #ffffff;
+    }
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-analytics.js"></script>
+    .item {
+      width: 300px;
+    }
 
-    <!-- TODO: Add SDKs for Firebase products that you want to use
-     https://firebase.google.com/docs/web/setup#available-libraries -->
-    <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-database.js"></script>
+    .item1 {
+      background: #ffffff;
+      border: 5px solid #ff0000;
+    }
 
-    <style>
-        figure.avatar {
-            bottom: 0px !important;
-        }
+    .item2 {
+      background: #fff7f7;
+    }
 
-        .btn-delete {
-            background: red;
-            color: white;
-            border: none;
-            margin-left: 10px;
-            border-radius: 5px;
-        }
+    .messages {
+      background: #ffb2b2;
+      display: flex;
+      margin: 5px;
+    }
 
-        .fixed-bottom {
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            background-color: lightseagreen;
-            color: white;
-            text-align: center;
-            padding: 25px;
-            font-size: 20px;
-        }
-    </style>
+    .messageLeft {
+      background: #ffe9ac;
+      margin: 5px;
+      border: 5px solid #292929;
+      width: 40%;
+    }
 
-</head>
+    .messageRight {
+      background: #d4ffac;
+      margin: 5px;
+      border: 5px solid #292929;
+      width: 30%;
+    }
+  </style>
 
 <body>
-
-    <div class="chat">
-        <div class="chat-title">
-            <h1>Chat Room111</h1>
-            <h2>Firebase</h2>
-            <figure class="avatar">
-                <img
-                    src="https://p7.hiclipart.com/preview/349/273/275/livechat-online-chat-computer-icons-chat-room-web-chat-others.jpg" />
-            </figure>
-        </div>
-        <div class="messages">
-            <div class="messages-content"></div>
-        </div>
-        <div class="message-box">
-            <textarea type="text" class="message-input" id="message" placeholder="Type message..."></textarea>
-            <button type="submit" class="message-submit">Send</button>
-        </div>
-
+  <div class="container">
+    <div class="item item1">
+      <form>
+        <input type="text" id="message-input" placeholder="" autofocus>
+      </form>
     </div>
-    <div class="bg"></div>
+    <div class="item item2">
+    </div>
+  </div>
 
-    <script>
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        var firebaseConfig = {
-            apiKey: "AIzaSyA-n4dwue7PArKFzBDS8tr4XEBUeRF2GEs",
-            authDomain: "fir-c3fbf.firebaseapp.com",
-            projectId: "fir-c3fbf",
-            storageBucket: "fir-c3fbf.appspot.com",
-            messagingSenderId: "121918325916",
-            appId: "1:121918325916:web:233b0349f524df25779959",
-            measurementId: "G-BPHH2CFZYF"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const analytics = firebase.analytics();
-        if (firebase.analytics.isSupported()) {
-            firebase.analytics();
-        }
-    </script>
+  <script>
+    $(document).ready(function () {
+      var $messageInput = $("#message-input");
+      var $container = $(".item.item2");
 
-    <script>
+      // Reference to the chat messages in Firebase
+      var chatRef = firebase.database().ref("messages");
 
-        firebase.database().ref("messages").on("child_removed", function (snapshot) {
-            document.getElementById("message-" + snapshot.key).innerHTML = "This message has been deleted";
+      var numbers = [];
+      for (var i = 1; i <= 100; i++) {
+        numbers.push(i);
+      }
+      var stringArray = numbers.map(function (num) {
+        return num.toString();
+      });
+
+      console.log(stringArray);
+
+//       var data = `
+// data1
+// data2
+// data3
+// `;
+//       var dataArray = data.split('\n');
+//       dataArray = dataArray.slice(1, -1);
+
+      for (var i = 0; i < stringArray.length; i++) {
+        var message = stringArray[i];
+        var email = 'email';
+        chatRef.push({
+          text: message,
+          email: email
         });
+      }
 
-        function deleteMessage(self) {
-            var messageId = self.getAttribute("data-id");
-            firebase.database().ref("messages").child(messageId).remove();
+      // Listen for key press on input field
+      $messageInput.keypress(function (e) {
+        // Check if Enter key is pressed
+        if (e.keyCode == 13) {
+          // Get message text
+          var message = $(this).val();
+          var email = 'emailemailemail';
+          // Save message to Firebase
+          chatRef.push({
+            text: message,
+            email: email
+          });
+          // Clear input field
+          $(this).val("");
         }
+      });
 
-        function sendMessage() {
-            var message = document.getElementById("message").value;
-            firebase.database().ref("messages").push().set({
-                "message": message,
-                "sender": myName
-            });
-            return false;
-        }
-    </script>
-
-
-
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script
-        src='https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.3/jquery.mCustomScrollbar.concat.min.js'></script>
-
-    <script src="js/index.js?v=<?= time(); ?>"></script>
-
+      // Listen for new messages added to Firebase
+      chatRef.on("child_added", function (snapshot) {
+        // Get message data
+        var message = snapshot.val().text;
+        var email = snapshot.val().email;
+        // Escape message and email inputs
+        var escapedMessage = $("<div>").text(message).html();
+        var escapedEmail = $("<div>").text(email).html();
+        // Add message to chat UI
+        $container.append("<div class='messages'><div class='messageLeft'>" + escapedMessage + "</div>" +
+          "<div class='messageRight'>" + escapedEmail + "</div></div>");
+        // Scroll container to bottom
+        $container.scrollTop($container[0].scrollHeight);
+      });
+    });
 
 
+  </script>
 </body>
-
-</html>
