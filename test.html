@@ -23,46 +23,17 @@
             font-size: 20px;
         }
 
-        .product {
-            background-color: rgb(248, 255, 230);
-            display: flex;
-            padding: 5px;
-        }
-
-        .thumbnail {
-            background-color: aqua;
-            max-width: 200px;
-            width: 100%;
-            border-radius: 10px;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .product .title {
-            background-color: rgb(228, 255, 255);
-            font-size: 17px;
-            font-weight: 600;
-        }
-
-        .product .date {
-            color: grey;
-            font-size: 13px;
-        }
-
-        .product .price {
-            font-size: 16px;
-            font-weight: 600;
+        .myCheckbox {
+            width: 20px;
+            height: 20px;
         }
     </style>
 
 </head>
 
 <body>
-    <button id="allDelete" onclick="allDelete">allDelete</button>
-    <a href="upload.html">uload</a>
+    <button id="allDelete">allDelete</button>
     <div class="container mt-3"></div>
-    <span class="ms-auto mx-2" id="userName">유저이름</span>
-
 </body>
 
 <script>
@@ -76,34 +47,48 @@
         measurementId: "G-VB12HRY0D2"
     };
     firebase.initializeApp(firebaseConfig);
-
     const db = firebase.firestore();
-    db.collection('product').get().then((result) => {
+
+    db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
             console.log(doc)
-            var 템플릿 = `
-             <a href="detail.html?id=${doc.id}"> ${doc.data().제목} </a>
-             ${doc.data().가격}
-             ${doc.data().날짜}
-             <br>
-            `;
-            $('.container').append(템플릿)
+            var template = `
+${doc.data().word}
+${doc.data().mean}
+<input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
+<span class="docId" style="display:none">${doc.id}</span>
+<br>
+`;
+            $('.container').append(template)
         })
     })
 
+    $('.container').on('click', '.myCheckbox', (event) => {
+        const checkbox = event.target;
+        if (checkbox.checked) {
+            const docId = $(checkbox).siblings('.docId').text();
+            console.log(`Checkbox with ID ${docId} was checked`);
+            db.collection('voca_test').add({
+                uid: docId
+            })
+        }
+    });
+
+    db.collection('voca_list').add({
+        word: 'sign',
+        mean: '사인'
+    })
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // Set the click event handler for the button
-    $('#allDelete').click(allDelete);
-    // Define the allDelete function
-    function allDelete() {
-        db.collection('product').get().then((result) => {
+    $('#allDelete').click(() => {
+        db.collection('voca_list').get().then((result) => {
             result.forEach((doc) => {
                 doc.ref.delete();
-            })
-        })
-    }
-
-    // db.collection('product').doc('상품3').set({ 제목: 'dd' })
-    // db.collection('product').add({ 제목: 'dd' })
+            });
+        });
+    });
 
 </script>
 <script>

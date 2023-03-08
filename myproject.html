@@ -7,6 +7,7 @@
     <meta title="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
 
@@ -20,7 +21,7 @@
 
     <style>
         * {
-            font-size: 20px;
+            font-size: 30px;
         }
 
         .product {
@@ -40,17 +41,17 @@
 
         .product .title {
             background-color: rgb(228, 255, 255);
-            font-size: 17px;
+            /* font-size: 17px; */
             font-weight: 600;
         }
 
         .product .date {
             color: grey;
-            font-size: 13px;
+            /* font-size: 13px; */
         }
 
         .product .price {
-            font-size: 16px;
+            /* font-size: 16px; */
             font-weight: 600;
         }
     </style>
@@ -58,10 +59,21 @@
 </head>
 
 <body>
-    <button id="allDelete" onclick="allDelete">allDelete</button>
-    <a href="upload.html">uload</a>
-    <div class="container mt-3"></div>
-    <span class="ms-auto mx-2" id="userName">유저이름</span>
+
+    <div class="container mt-3">
+        <div class="mb-3">
+            <button id="allDelete" onclick="allDelete">allDelete</button>
+            <span class="ms-auto mx-2" id="userName">유저이름</span>
+        </div>
+        <div class="mb-3">
+            <input type="email" class="form-control" placeholder="email" id="email">
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" placeholder="pw" id="pw">
+        </div>
+        <button type="submit" class="btn btn-primary" id="login">로그인</button>
+        <button type="submit" class="btn btn-primary" id="logout">로그아웃</button>
+    </div>
 
 </body>
 
@@ -75,21 +87,67 @@
         appId: "1:858711752608:web:060df778af6cb153092ec5",
         measurementId: "G-VB12HRY0D2"
     };
+
     firebase.initializeApp(firebaseConfig);
 
     const db = firebase.firestore();
-    db.collection('product').get().then((result) => {
+    const storage = firebase.storage();
+
+    db.collection('voca').add({ 제목: 'dd' })
+
+    db.collection('voca').get().then((result) => {
         result.forEach((doc) => {
             console.log(doc)
-            var 템플릿 = `
-             <a href="detail.html?id=${doc.id}"> ${doc.data().제목} </a>
-             ${doc.data().가격}
-             ${doc.data().날짜}
-             <br>
-            `;
-            $('.container').append(템플릿)
+            var 템플릿 = `<br>■ ${doc.data().meaning}`;
+            $('.container').append(템플릿);
         })
     })
+
+    var 빼낸거 = localStorage.getItem('myuser');
+    if (빼낸거) {
+        $('#userName').html(JSON.parse(빼낸거).displayName)
+    }
+    firebase.auth().onAuthStateChanged((myuser) => {
+        console.log(myuser.email)
+        if (myuser) {
+            localStorage.setItem('myuser', JSON.stringify(myuser))
+        }
+    })
+
+    ////////////////////////////////////////////////////////////
+
+    // $('#register').click(function () {
+
+    //     var 이메일 = $('#email-new').val();
+    //     var 패스워드 = $('#pw-new').val();
+    //     var 이름 = $('#name-new').val();
+
+    //     firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result) => {
+    //         console.log(result.user)
+    //         result.user.updateProfile({ displayName: 이름 })
+    //     })
+    //     alert();
+    // })
+
+    $('#login').click(function () {
+
+        var 이메일 = $('#email').val();
+        var 패스워드 = $('#pw').val();
+
+        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
+            console.log(result.user)
+        })
+    })
+
+    $('#logout').click(function () {
+        firebase.auth().signOut()
+    })
+
+    // db.collection('product').doc('상품3').set({ 제목: '변기' })
+    // db.collection('voca').add({
+    //     제목: '변기',
+    //     뜻: 'Request'
+    // })
 
     // Set the click event handler for the button
     $('#allDelete').click(allDelete);
@@ -102,18 +160,8 @@
         })
     }
 
-    // db.collection('product').doc('상품3').set({ 제목: 'dd' })
-    // db.collection('product').add({ 제목: 'dd' })
-
 </script>
 <script>
-    // var chatRef = firebase.database().ref("i_data");
-    // var stringArray = ['1']
-    // stringArray.forEach(function (message) {
-    //     chatRef.push({
-    //         text: message,
-    //     });
-    // });
 
 </script>
 
