@@ -41,11 +41,27 @@
 </head>
 
 <body>
-
+    <input type="text" id="search-input" placeholder="Search...">
+    <ul id="search-results"></ul>
 </body>
 
 <script>
- 
+    // Get a reference to the "items" node in the database
+    var itemsRef = database.ref("voca_list");
+
+    // Set up the live search
+    $("#search-input").on("keyup", function () {
+        var searchValue = $(this).val().toLowerCase();
+        itemsRef.orderByChild("name").startAt(searchValue).endAt(searchValue + "\uf8ff").on("value", function (snapshot) {
+            var resultHtml = "";
+            snapshot.forEach(function (childSnapshot) {
+                var item = childSnapshot.val();
+                resultHtml += "<li>" + item.name + "</li>";
+            });
+            $("#search-results").html(resultHtml);
+        });
+    });
+
 </script>
 
 </html>

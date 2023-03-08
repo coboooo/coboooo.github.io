@@ -29,13 +29,13 @@
             height: 20px;
         }
 
-        .line {
+        .line-container {
             background-color: rgb(236, 236, 236);
             margin: 10px;
             transition: background-color 0.1s ease;
         }
 
-        .line:hover {
+        .line-container:hover {
             background-color: rgb(255, 161, 161);
             margin: 10px;
         }
@@ -69,24 +69,40 @@
     <button id="allDelete" class="allDelete">allDelete</button>
     <div class="container mt-3"></div>
     <div class="test"></div>
+
+    <input type="text" id="search" autofocus>
+    <div class="result">1</div>
+
 </body>
 
 <!-- main -->
 <script>
+
+let wordsSet = new Set();
+db.collection('voca_test').get().then((result) => {
+    result.forEach((doc) => {
+        let word = doc.data().word;
+        wordsSet.add(word);
+    });
+    let wordsArray = Array.from(wordsSet); // convert the Set back to an array
+    console.log(wordsArray); // print the array of unique words
+});
+
     db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
             var template = `
-            <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
-            <div class="line">
+            <div class="line-container">
+                <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
                 <span class="word">${doc.data().word}</span>
                 <span class="mean">${doc.data().mean}</span>
                 <span class="docId" style="display:none">${doc.id}</span>
             </div>
-            `;
+    `;
             $('.container').append(template)
         })
-    })
-    $('.container').on('click', '.line', (event) => {
+    });
+
+    $('.container').on('click', '.line-container', (event) => {
         const checkbox = $(event.currentTarget).find('.myCheckbox');
         checkbox.prop('checked', !checkbox.prop('checked'));
         if (checkbox.prop('checked')) {
@@ -103,8 +119,8 @@
             db.collection('voca_test').get().then((result) => {
                 result.forEach((doc) => {
                     var template = `
-                    ${doc.data().email} - ${doc.data().word}<br>
-                    `;
+          ${doc.data().email} - ${doc.data().word}<br>
+        `;
                     $('.test').append(template);
                 });
             });
