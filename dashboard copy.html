@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    * {
+      font-size: 30px;
+    }
+  </style>
+
+  <!-- Include the Firebase and Google authentication SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA-n4dwue7PArKFzBDS8tr4XEBUeRF2GEs",
+      authDomain: "fir-c3fbf.firebaseapp.com",
+      projectId: "fir-c3fbf",
+      storageBucket: "fir-c3fbf.appspot.com",
+      messagingSenderId: "121918325916",
+      appId: "1:121918325916:web:233b0349f524df25779959",
+      measurementId: "G-BPHH2CFZYF"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+  </script>
+
+</head>
+
+<body>
+  <div id="user-id-container"></div>
+  <button id="logout-button" style="display:none">Logout</button>
+  <button id="google-login-button">Sign in with Google</button>
+  </div>
+
+  <script>
+    $(document).ready(function () {
+      // Handle the Google login button click event
+      $(document).ready(function () {
+        // Handle the Google login button click event
+        $('#google-login-button').click(function () {
+          firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+            .then(function () {
+              return firebase.auth().signInWithPopup(provider);
+            })
+            .then(function (result) {
+              // Persist the user's login state using localStorage
+              localStorage.setItem('userEmail', result.user.email);
+              // Display the user ID on the screen
+              $('#user-id-container').text(result.user.email);
+              // Hide the login button and show the logout button
+              $('#google-login-button').hide();
+              $('#logout-button').show();
+              console.log(result.user.email)
+            })
+            .catch(function (error) {
+              // Handle errors
+              var errorMessage = error.message;
+              alert(errorMessage);
+            });
+        });
+
+        // Check if the user is already logged in and display their email
+        var userEmail = localStorage.getItem('userEmail');
+        if (userEmail) {
+          $('#user-id-container').text(userEmail);
+          $('#google-login-button').hide();
+          $('#logout-button').show();
+        }
+      });
+
+      // Handle the logout button click event
+      $('#logout-button').click(function () {
+        firebase.auth().signOut()
+          .then(function () {
+            // Clear the user ID container and hide the logout button
+            document.getElementById("user-id-container").innerHTML = "";
+            document.getElementById("logout-button").style.display = "none";
+            // Show the login button
+            $('#google-login-button').show();
+          })
+          .catch(function (error) {
+            // Handle errors
+            var errorMessage = error.message;
+            alert(errorMessage);
+          });
+      });
+    });
+  </script>
+
+</body>
+
+</html>
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function (event) {
+      const db = firebase.firestore();
+      db.collection('i_data').get().then((result) => {
+        result.forEach(element => {
+          console.log(element.data())
+          const div = document.createElement("div");
+          div.textContent = element.data().length;
+          document.body.appendChild(div);
+          console.log(result);
+        });
+      });
+    });
+  </script> -->

@@ -7,7 +7,6 @@
     <meta title="viewport" content="width=device-width, initial-scale=1.0">
 
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
 
@@ -21,7 +20,7 @@
 
     <style>
         * {
-            font-size: 20px;
+            font-size: 30px;
         }
 
         .myCheckbox {
@@ -45,47 +44,47 @@
         }
     </style>
 
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBKX2qVDlRCvG2wEPGnHSI_do-1b1MNDgA",
-            authDomain: "jeju-30f0f.firebaseapp.com",
-            projectId: "jeju-30f0f",
-            storageBucket: "jeju-30f0f.appspot.com",
-            messagingSenderId: "858711752608",
-            appId: "1:858711752608:web:060df778af6cb153092ec5",
-            measurementId: "G-VB12HRY0D2"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-    </script>
-
 </head>
 
 <body>
-    <p id="email"></p>
-    <button id="login" onclick="login()">Login with Google</button>
-    <button id="logout" onclick="logout()">Logout</button>
+
+    <div id="user-id-container"></div>
+    <button id="logout-button" style="display:none">Logout</button>
+    <button id="google-login-button">Sign in with Google</button>
+    </div>
     <br>
     <button id="allDelete" class="allDelete">allDelete</button>
     <div class="container mt-3"></div>
     <div class="test"></div>
 </body>
 
-<!-- main -->
 <script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyBKX2qVDlRCvG2wEPGnHSI_do-1b1MNDgA",
+        authDomain: "jeju-30f0f.firebaseapp.com",
+        projectId: "jeju-30f0f",
+        storageBucket: "jeju-30f0f.appspot.com",
+        messagingSenderId: "858711752608",
+        appId: "1:858711752608:web:060df778af6cb153092ec5",
+        measurementId: "G-VB12HRY0D2"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
     db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
             var template = `
-            <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
             <div class="line">
                 <span class="word">${doc.data().word}</span>
                 <span class="mean">${doc.data().mean}</span>
+                <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
                 <span class="docId" style="display:none">${doc.id}</span>
             </div>
             `;
             $('.container').append(template)
         })
     })
+
     $('.container').on('click', '.line', (event) => {
         const checkbox = $(event.currentTarget).find('.myCheckbox');
         checkbox.prop('checked', !checkbox.prop('checked'));
@@ -96,7 +95,7 @@
             const word = checkbox.siblings('.word').text();
 
             db.collection('voca_test').add({
-                email: email,
+                email: userEmail,
                 word: word,
             });
 
@@ -142,80 +141,63 @@
         });
 
     });
+
 </script>
 
-<!-- log in and out -->
 <script>
-    var email;
-    // Check if user is already logged in
+    var userEmail = localStorage.getItem('userEmail');
     $(document).ready(function () {
-        var user = localStorage.getItem("user");
-        if (user) {
-            $("#login").hide();
-            $("#logout").show();
-            email = user;
-            $("#email").text(email);
-        } else {
-            $("#login").show();
-            $("#logout").hide();
-        }
+        // Handle the Google login button click event
+        $(document).ready(function () {
+            // Handle the Google login button click event
+            $('#google-login-button').click(function () {
+                firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+                    .then(function () {
+                        return firebase.auth().signInWithPopup(provider);
+                    })
+                    .then(function (result) {
+                        // Persist the user's login state using localStorage
+                        localStorage.setItem('userEmail', result.user.email);
+                        // Display the user ID on the screen
+                        $('#user-id-container').text(result.user.email);
+                        // Hide the login button and show the logout button
+                        $('#google-login-button').hide();
+                        $('#logout-button').show();
+                        console.log(result.user.email)
+                    })
+                    .catch(function (error) {
+                        // Handle errors
+                        var errorMessage = error.message;
+                        alert(errorMessage);
+                    });
+            });
+
+            // Check if the user is already logged in and display their email
+            if (userEmail) {
+                $('#user-id-container').text(userEmail);
+                $('#google-login-button').hide();
+                $('#logout-button').show();
+            }
+        });
+
+        // Handle the logout button click event
+        $('#logout-button').click(function () {
+            firebase.auth().signOut()
+                .then(function () {
+                    // Clear the user ID container and hide the logout button
+                    document.getElementById("user-id-container").innerHTML = "";
+                    document.getElementById("logout-button").style.display = "none";
+                    // Show the login button
+                    $('#google-login-button').show();
+                })
+                .catch(function (error) {
+                    // Handle errors
+                    var errorMessage = error.message;
+                    alert(errorMessage);
+                });
+        });
     });
-    // Login function
-    function login() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function (result) {
-            email = result.user.email;
-            localStorage.setItem("user", email);
-            $("#login").hide();
-            $("#email").text(email);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }
-    // Logout function
-    function logout() {
-        firebase.auth().signOut().then(function () {
-            localStorage.removeItem("user"); // clear localStorage value for user
-            $("#login").show();
-            email = null;
-            $("#email").text("");
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }
 </script>
-
-<!-- txt file -->
-<script>
-    // Create a new XMLHttpRequest object
-    var xhr = new XMLHttpRequest();
-
-    // Set the URL of the file you want to read
-    var url = "1.txt";
-
-    // Set the responseType to "text"
-    xhr.responseType = "text";
-
-    // Open the file
-    xhr.open("GET", url, true);
-
-    // Send the request
-    xhr.send();
-
-    // When the request is complete
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            // Get the contents of the file
-            var data = xhr.responseText;
-
-            // Do something with the data
-            // alert(data);
-            console.log(data);
-        }
-    }
-</script>
-
-</html>
 
 <script>
     // var chatRef = firebase.database().ref("i_data");
@@ -227,3 +209,5 @@
     // });
 
 </script>
+
+</html>
