@@ -68,8 +68,8 @@
         result.forEach((doc) => {
             var template = `
             <div class="line">
-                ${doc.data().word}
-                ${doc.data().mean}
+                <span class="word">${doc.data().word}</span>
+                <span class="mean">${doc.data().mean}</span>
                 <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
                 <span class="docId" style="display:none">${doc.id}</span>
             </div>
@@ -84,17 +84,22 @@
         if (checkbox.prop('checked')) {
             const docId = checkbox.siblings('.docId').text();
             console.log(`Checkbox with ID ${docId} was checked`);
+
+            const word = checkbox.siblings('.word').text();
+
             db.collection('voca_test').add({
-                email: userEmail
-            })
+                email: userEmail,
+                word: word,
+            });
+
             db.collection('voca_test').get().then((result) => {
                 result.forEach((doc) => {
                     var template = `
-                    ${doc.data().email}<br>
-                    `;
-                    $('.container').append(template)
-                })
-            })
+        ${doc.data().email} - ${doc.data().word}<br>
+        `;
+                    $('.container').append(template);
+                });
+            });
         }
     });
 
