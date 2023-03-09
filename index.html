@@ -18,7 +18,35 @@
         crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        @media all and (max-width: 320px) {
 
+            html,
+            body {
+                background-color: white;
+            }
+        }
+
+        @media all and (min-width: 321px) and (max-width: 768px) {
+
+            /* phone */
+            html,
+            body {
+                background-color: rgb(255, 255, 255);
+                width: 100%
+            }
+        }
+
+        @media all and (min-width: 769px) {
+
+            /* pc */
+            html,
+            body {
+                background-color: rgb(255, 255, 255);
+                width: 70%
+            }
+        }
+    </style>
     <style>
         * {
             font-size: 20px;
@@ -71,48 +99,27 @@
 
 <body>
 
-    <header>
-        <div class="navbar navbar-dark bg-dark box-shadow">
-            <div class="container">
-                <strong class="text-white h3">Album</strong>
-            </div>
+    <span class="ms-auto mx-2" id="emailshow"></span>
+    <span class="ms-auto mx-2" id="userName"></span>
+    <div class="bucket mt-3">
+        <div class="mb-3">
+            <input type="email" class="form-control" placeholder="email" id="email">
         </div>
-    </header>
-
-    <main role="main">
-        <section class="jumbotron">
-            <div class="container">
-                <p class="lead">
-                    <span class="ms-auto mx-2" id="emailshow"></span>
-                    <span class="ms-auto mx-2" id="userName"></span>
-                <div class="bucket mt-3">
-                    <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="email" id="email">
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="pw" id="pw">
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
-                </div>
-                <br>
-                <button id="logout" style="display:none;">로그아웃</button>
-
-                <button id="allDelete" class="allDelete">DELETEALL</button>
-                <div class="starting"></div>
-                <div class="test"></div>
-
-                <input type="text" id="search" autofocus>
-                <div class="result">111</div>
-                </p>
-            </div>
-        </section>
-    </main>
-
-    <footer class="text-muted">
-        <div class="container">
-            <p>... &copy; ...</p>
+        <div class="mb-3">
+            <input type="password" class="form-control" placeholder="pw" id="pw">
         </div>
-    </footer>
+        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+    </div>
+    <br>
+    <button id="logout" style="display:none;">로그아웃</button>
+
+    <button id="allDelete" class="allDelete">DELETEALL</button>
+    <div class="starting"></div>
+    <div class="test"></div>
+
+    <input type="text" id="search" autofocus>
+    <div class="result">111</div>
+    <div id="myObj" class="myObj"></div>
 
 </body>
 
@@ -321,7 +328,6 @@
 
 </script>
 
-<div id="myObj" class="myObj"></div>
 <script>
     const inames = Array.from({ length: 5 }, (_, i) => `name${i + 1}`);
     const iwords = Array.from({ length: 100 }, (_, i) => `word${i + 1}`);
