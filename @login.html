@@ -131,16 +131,16 @@
         $('#userName').hide();
     })
 
-    // This checks if the user is already logged in on page load.
-    // If there is a saved user object in local storage, it attempts to log the user in using signInWithEmailAndPassword.
-    // If there is an error, it logs it to the console.
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password).catch(function (error) {
-            console.log(error);
-        });
-    }
+    // // This checks if the user is already logged in on page load.
+    // // If there is a saved user object in local storage, it attempts to log the user in using signInWithEmailAndPassword.
+    // // If there is an error, it logs it to the console.
+    // var userStr = localStorage.getItem('user');
+    // if (userStr) {
+    //     var userObj = JSON.parse(userStr);
+    //     firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password).catch(function (error) {
+    //         console.log(error);
+    //     });
+    // }
 
 </script>
 
