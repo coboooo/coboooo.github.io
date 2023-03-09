@@ -43,8 +43,25 @@
             html,
             body {
                 background-color: rgb(255, 255, 255);
-                width: 70%
+                width: 100%
             }
+        }
+    </style>
+
+    <style>
+        .form-group {
+            margin-bottom: 5px !important;
+        }
+
+        .outer {
+            display: flex;
+            justify-content: center;
+            background-color: rgb(241, 241, 241);
+        }
+
+        .inner {
+            margin: 10px;
+            background-color: rgb(201, 201, 201);
         }
     </style>
     <style>
@@ -99,27 +116,55 @@
 
 <body>
 
-    <span class="ms-auto mx-2" id="emailshow"></span>
-    <span class="ms-auto mx-2" id="userName"></span>
-    <div class="bucket mt-3">
-        <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email">
+    <div class="outer">
+
+        <div class="inner">
+
+            <div>1</div>
+
+            <script type="text/javascript">
+
+            </script>
+
+            <div class="form-group">
+                <input id="query" class="form-control form-control-lg text-bg-light fs-6 border border-3" type="text"
+                    placeholder="입력하세요." aria-label=".form-control-lg example" autocomplete="off" autofocus>
+            </div>
+
+            <span class="ms-auto mx-2" id="emailshow"></span>
+            <span class="ms-auto mx-2" id="userName"></span>
+            <div class="bucket mt-3">
+                <div class="mb-3">
+                    <input type="email" class="form-control" placeholder="email" id="email">
+                </div>
+                <div class="mb-3">
+                    <input type="password" class="form-control" placeholder="pw" id="pw">
+                </div>
+                <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+            </div>
+            <br>
+            <button id="logout" style="display:none;">로그아웃</button>
+        
+            <button id="allDelete" class="allDelete">DELETEALL</button>
+            <div class="starting"></div>
+            <div class="test"></div>
+        
+            <input type="text" id="search" autofocus>
+            <div class="result">111</div>
+            <div id="myObj" class="myObj"></div>
+
+            <div id="result1" class="result1"></div>
+            1
+            <button type="button" class="btn btn-warning w-100">
+                <div style="font-size: small;">
+                    질문 답변 게시판
+                </div>
+            </button>
+
         </div>
-        <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw">
-        </div>
-        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+
     </div>
-    <br>
-    <button id="logout" style="display:none;">로그아웃</button>
 
-    <button id="allDelete" class="allDelete">DELETEALL</button>
-    <div class="starting"></div>
-    <div class="test"></div>
-
-    <input type="text" id="search" autofocus>
-    <div class="result">111</div>
-    <div id="myObj" class="myObj"></div>
 
 </body>
 
