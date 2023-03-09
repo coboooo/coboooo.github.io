@@ -46,8 +46,20 @@
 </head>
 
 <body>
+    <div class="apple mt-3">
+    </div>
+    <div id="myList">
+        <ul>
+            <li>Item 1</li>
+            <li>Item 2</li>
+        </ul>
+    </div>
+    <input type="file" id="image">
+    <button id="send">send</button>
+    <button id="delete">delete</button>
+    <br>
+    <br>
 
-    <span class="ms-auto mx-2" id="emailshow"></span>
     <span class="ms-auto mx-2" id="userName"></span>
     <div class="container mt-3">
         <div class="mb-3">
@@ -66,10 +78,7 @@
 
     const collectionRef = db.collection("product");
 
-    // This sets up a click event listener on the login button.
-    // When the button is clicked, it retrieves the email and password from the input fields
-    // and attempts to log the user in using Firebase's signInWithEmailAndPassword method.
-    // If the login is successful, it hides the input window and shows the logout button.
+    // login with password
     $('#login').click(function () {
         var 이메일 = $('#email').val();
         var 패스워드 = $('#pw').val();
@@ -77,56 +86,100 @@
             // console.log(result.user)
             $('.container').hide();
             $('#logout').show();
-
+            $('#userName').text(userObj.displayName + '님, 로그인이 완료되었습니다.').show();
         })
     })
 
-    // This retrieves the user object from local storage and displays their email address.
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        $('#emailshow').html(userObj.email);
-    }
-
-    // This sets up an event listener for changes in the user's authentication state.
-    // If the user is logged in, it saves their user object to local storage and updates the UI.
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log(user.email);
-            localStorage.setItem('user', JSON.stringify(user));
-            // user is logged in, hide the input window
-            $('.container').hide();
-            $('#logout').show();
-            $('#emailshow').html(user.email);
-        } else {
-            // user is not logged in, show the input window
-            $('.container').show();
-            $('#logout').hide();
-            $('#emailshow').html('');
-        }
-    });
-
-    // This sets up a click event listener on the logout button.
-    // When the button is clicked, it logs the user out of Firebase and removes their user object from local storage.
-    // It also shows the input window and hides the logout button.
+    // logout
     $('#logout').click(function () {
         firebase.auth().signOut()
-        localStorage.removeItem('user');
         $('.container').show();
         $('#logout').hide();
         $('#userName').hide();
     })
 
-    // This checks if the user is already logged in on page load.
-    // If there is a saved user object in local storage, it attempts to log the user in using signInWithEmailAndPassword.
-    // If there is an error, it logs it to the console.
     var userStr = localStorage.getItem('user');
     if (userStr) {
         var userObj = JSON.parse(userStr);
-        firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password).catch(function (error) {
-            console.log(error);
-        });
+        // $('#userName').html(userObj.displayName);
     }
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            console.log(user);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    });
+
+    // var file = document.querySelector('#image').files[0];
+    // var storageRef = storage.ref();
+    // var 저장할경로 = storageRef.child('image/' + file.name);
+    // var 업로드작업 = 저장할경로.put(file)
+
+    $('#delete').click(function () {
+        collectionRef.get().then((result) => {
+            result.forEach((doc) => {
+                doc.ref.delete();
+            })
+        })
+    })
+
+    collectionRef.get().then((결과) => {
+        결과.forEach((doc) => {
+            var 템플릿 = `${doc.data().title}<br>`;
+            $('.apple').append(템플릿)
+        })
+    })
+
+    // add
+    // collectionRef.get().then((querySnapshot) => {
+    //     collectionRef.add({
+    //         title: new Date()
+    //     })
+    // });
+
+    // add
+    $('#send').click(function () {
+        collectionRef.add({ title: new Date() })
+    })
+
+    $(document).ready(function () {
+        var numItems = $('#myList ul li').length; // Get the number of <li> elements in the list
+        $('#myList ul li:lt(' + numItems + ')').remove(); // Use the variable in the :lt() selector
+        var newItem = "<li>Item 3</li>";
+        $('#myList ul').append(newItem);
+    });
+
+    // membership registration
+    // $('#register').click(function () {
+    //     var 이메일 = $('#email-new').val();
+    //     var 패스워드 = $('#pw-new').val();
+    //     firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result) => {
+    //         console.log(result)
+    //         console.log(result.user)
+    //         result.user.updateProfile({ displayName: 이름 })
+    //     })
+    // })
+
+</script>
+
+<script>
+    // db.collection('product').doc('상품3').set({ 제목: '변기' })
+
+    // var chatRef = firebase.database().ref("i_data");
+    // var stringArray = [1, 2, 3];
+
+    // for (var i = 0; i < stringArray.length; i++) {
+    //     var message = stringArray[i];
+    //     chatRef.push({
+    //         text: message,
+    //     })
+    //         .then(function () {
+    //             console.log("Message added successfully!");
+    //         })
+    //         .catch(function (error) {
+    //             console.error("Error adding message: ", error);
+    //         });
+    // }
 
 </script>
 
