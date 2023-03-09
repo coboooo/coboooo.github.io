@@ -43,6 +43,14 @@
         .allDelete {
             background-color: rgb(255, 81, 81);
         }
+
+        .myObj {
+            background-color: rgb(255, 221, 221);
+            border: 10px solid black;
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+        }
     </style>
 
     <script>
@@ -62,26 +70,49 @@
 </head>
 
 <body>
-    <span class="ms-auto mx-2" id="emailshow"></span>
-    <span class="ms-auto mx-2" id="userName"></span>
-    <div class="bucket mt-3">
-        <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email">
-        </div>
-        <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw">
-        </div>
-        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
-    </div>
-    <br>
-    <button id="logout" style="display:none;">로그아웃</button>
 
-    <button id="allDelete" class="allDelete">allDelete</button>
-    <div class="container mt-3"></div>
-    <div class="test"></div>
+    <header>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container">
+                <strong class="text-white h3">Album</strong>
+            </div>
+        </div>
+    </header>
 
-    <input type="text" id="search" autofocus>
-    <div class="result">1</div>
+    <main role="main">
+        <section class="jumbotron">
+            <div class="container">
+                <p class="lead">
+                    <span class="ms-auto mx-2" id="emailshow"></span>
+                    <span class="ms-auto mx-2" id="userName"></span>
+                <div class="bucket mt-3">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="email" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="pw" id="pw">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+                </div>
+                <br>
+                <button id="logout" style="display:none;">로그아웃</button>
+
+                <button id="allDelete" class="allDelete">DELETEALL</button>
+                <div class="starting"></div>
+                <div class="test"></div>
+
+                <input type="text" id="search" autofocus>
+                <div class="result">111</div>
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-muted">
+        <div class="container">
+            <p>... &copy; ...</p>
+        </div>
+    </footer>
 
 </body>
 
@@ -103,18 +134,18 @@
     db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
             var template = `
-            <div class="line-container">
+            <div class="line-bucket">
                 <input type="checkbox" id="myCheckbox" class="myCheckbox" name="myCheckbox" value="1">
                 <span class="word">${doc.data().word}</span>
                 <span class="mean">${doc.data().mean}</span>
                 <span class="docId" style="display:none">${doc.id}</span>
             </div>
     `;
-            $('.container').append(template)
+            $('.starting').append(template)
         })
     });
 
-    $('.container').on('click', '.line-container', (event) => {
+    $('.starting').on('click', '.line-bucket', (event) => {
         const checkbox = $(event.currentTarget).find('.myCheckbox');
         checkbox.prop('checked', !checkbox.prop('checked'));
         if (checkbox.prop('checked')) {
@@ -133,8 +164,8 @@
             db.collection('voca_test').get().then((result) => {
                 result.forEach((doc) => {
                     var template = `
-          ${doc.data().email} - ${doc.data().word} - ${doc.data().mean}<br>
-        `;
+              ${doc.data().email} - ${doc.data().word} - ${doc.data().mean}<br>
+            `;
                     $('.test').append(template);
                 });
             });
@@ -288,4 +319,38 @@
     //     });
     // }
 
+</script>
+
+<div id="myObj" class="myObj"></div>
+<script>
+    const inames = Array.from({ length: 5 }, (_, i) => `name${i + 1}`);
+    const iwords = Array.from({ length: 100 }, (_, i) => `word${i + 1}`);
+
+    let data = [];
+    for (let i = 0; i < 100; i++) {
+        let nameIndex = Math.floor(Math.random() * 5);
+        let wordIndex = Math.floor(Math.random() * 100);
+        let key = `${inames[nameIndex]}`;
+        let value = `${iwords[wordIndex]}`;
+        data.push({ [key]: value });
+    }
+
+    const result = data.map(obj => Object.keys(obj)[0]);
+
+    const frequency = result.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+    }, {});
+
+    const sortedFrequency = Object.fromEntries(
+        Object.entries(frequency).sort((a, b) => b[1] - a[1])
+    );
+
+    const myObjDiv = document.getElementById("myObj");
+    for (const [key, value] of Object.entries(sortedFrequency)) {
+        const div = document.createElement("div");
+        div.innerText = `${key}: ${value}`;
+        div.style.border = "1px solid black"; // Add border to div element
+        myObjDiv.appendChild(div);
+    }
 </script>
