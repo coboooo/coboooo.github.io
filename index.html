@@ -63,8 +63,8 @@
 
 <body>
     <p id="email"></p>
-    <button id="login" onclick="login()">Login with Google</button>
-    <button id="logout" onclick="logout()">Logout</button>
+    <!-- <button id="login" onclick="login()">Login with Google</button> -->
+    <!-- <button id="logout" onclick="logout()">Logout</button> -->
     <br>
     <button id="allDelete" class="allDelete">allDelete</button>
     <div class="container mt-3"></div>
@@ -78,15 +78,15 @@
 <!-- main -->
 <script>
 
-let wordsSet = new Set();
-db.collection('voca_test').get().then((result) => {
-    result.forEach((doc) => {
-        let word = doc.data().word;
-        wordsSet.add(word);
+    let wordsSet = new Set();
+    db.collection('voca_test').get().then((result) => {
+        result.forEach((doc) => {
+            let word = doc.data().word;
+            wordsSet.add(word);
+        });
+        let wordsArray = Array.from(wordsSet); // convert the Set back to an array
+        console.log(wordsArray); // print the array of unique words
     });
-    let wordsArray = Array.from(wordsSet); // convert the Set back to an array
-    console.log(wordsArray); // print the array of unique words
-});
 
     db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
@@ -110,16 +110,18 @@ db.collection('voca_test').get().then((result) => {
             console.log(`Checkbox with ID ${docId} was checked`);
 
             const word = checkbox.siblings('.word').text();
+            const mean = checkbox.siblings('.mean').text();
 
             db.collection('voca_test').add({
                 email: email,
                 word: word,
+                mean: mean,
             });
 
             db.collection('voca_test').get().then((result) => {
                 result.forEach((doc) => {
                     var template = `
-          ${doc.data().email} - ${doc.data().word}<br>
+          ${doc.data().email} - ${doc.data().word} - ${doc.data().mean}<br>
         `;
                     $('.test').append(template);
                 });
@@ -162,43 +164,43 @@ db.collection('voca_test').get().then((result) => {
 
 <!-- log in and out -->
 <script>
-    var email;
-    // Check if user is already logged in
-    $(document).ready(function () {
-        var user = localStorage.getItem("user");
-        if (user) {
-            $("#login").hide();
-            $("#logout").show();
-            email = user;
-            $("#email").text(email);
-        } else {
-            $("#login").show();
-            $("#logout").hide();
-        }
-    });
-    // Login function
-    function login() {
-        var provider = new firebase.auth.GoogleAuthProvider();
-        firebase.auth().signInWithPopup(provider).then(function (result) {
-            email = result.user.email;
-            localStorage.setItem("user", email);
-            $("#login").hide();
-            $("#email").text(email);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }
-    // Logout function
-    function logout() {
-        firebase.auth().signOut().then(function () {
-            localStorage.removeItem("user"); // clear localStorage value for user
-            $("#login").show();
-            email = null;
-            $("#email").text("");
-        }).catch(function (error) {
-            console.log(error);
-        });
-    }
+    // var email;
+    // // Check if user is already logged in
+    // $(document).ready(function () {
+    //     var user = localStorage.getItem("user");
+    //     if (user) {
+    //         $("#login").hide();
+    //         $("#logout").show();
+    //         email = user;
+    //         $("#email").text(email);
+    //     } else {
+    //         $("#login").show();
+    //         $("#logout").hide();
+    //     }
+    // });
+    // // Login function
+    // function login() {
+    //     var provider = new firebase.auth.GoogleAuthProvider();
+    //     firebase.auth().signInWithPopup(provider).then(function (result) {
+    //         email = result.user.email;
+    //         localStorage.setItem("user", email);
+    //         $("#login").hide();
+    //         $("#email").text(email);
+    //     }).catch(function (error) {
+    //         console.log(error);
+    //     });
+    // }
+    // // Logout function
+    // function logout() {
+    //     firebase.auth().signOut().then(function () {
+    //         localStorage.removeItem("user"); // clear localStorage value for user
+    //         $("#login").show();
+    //         email = null;
+    //         $("#email").text("");
+    //     }).catch(function (error) {
+    //         console.log(error);
+    //     });
+    // }
 </script>
 
 <!-- txt file -->

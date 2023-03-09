@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<script>
+  // Define the array of words
+  const words = [];
+
+  for (let i = 1; i <= 60; i++) {
+    words.push(`word${i}`);
+  }
+
+  // Define the number of words in each chapter
+  const wordsPerChapter = 10;
+
+  // Define the number of chapters
+  const numChapters = words.length / wordsPerChapter;
+
+  // Define the start time for the chapters (9:00 PM)
+  const startTime = new Date();
+  startTime.setHours(21, 0, 0, 0);
+
+  // Define the current date
+  const currentDate = new Date();
+
+  // Define a function to get the current chapter
+  function getCurrentChapter() {
+    // Calculate the number of minutes since the start time
+    const minutesSinceStart = Math.floor((currentDate.getTime() - startTime.getTime()) / 60000);
+
+    // Calculate the index of the current chapter in the array
+    const currentChapterIndex = Math.floor(minutesSinceStart / numChapters) % numChapters;
+
+    // Return the current chapter as an array of words
+    return words.slice(currentChapterIndex * wordsPerChapter, (currentChapterIndex + 1) * wordsPerChapter).join(",");
+  }
+
+  // Define a function to log the current chapter
+  function logCurrentChapter() {
+    console.log(`The current chapter is: ${getCurrentChapter()}`);
+  }
+
+  // If it's before 9:00 PM, log the number of minutes until the start time
+  if (currentDate.getTime() < startTime.getTime()) {
+    const minutesUntilStart = Math.ceil((startTime.getTime() - currentDate.getTime()) / 60000);
+    console.log(`The first chapter will be given in ${minutesUntilStart} minutes`);
+  } else {
+    // Otherwise, log the current chapter and schedule the next chapter to be logged every minute
+    logCurrentChapter();
+    setInterval(logCurrentChapter, 60000);
+  }
+
+  setInterval(function () {
+    var today = new Date();
+    var time = today.toLocaleTimeString();
+    console.clear();
+    console.log(time);
+  }, 1000);
+
+</script>
+
