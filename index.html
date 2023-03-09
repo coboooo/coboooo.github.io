@@ -31,7 +31,21 @@
     <main role="main">
         <section class="jumbotron">
             <div class="container">
-                <p class="lead">Something ...</p>
+                <p class="lead">
+                    <span class="ms-auto mx-2" id="emailshow"></span>
+                    <span class="ms-auto mx-2" id="userName"></span>
+                <div class="bucket mt-3">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="email" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="pw" id="pw">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+                </div>
+                <br>
+                <button id="logout" style="display:none;">로그아웃</button>
+                </p>
             </div>
         </section>
     </main>
