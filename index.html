@@ -276,3 +276,36 @@
     // }
 
 </script>
+
+<script>
+    const inames = Array.from({ length: 5 }, (_, i) => `name${i + 1}`);
+    const iwords = Array.from({ length: 100 }, (_, i) => `word${i + 1}`);
+
+    let data = [];
+    for (let i = 0; i < 100; i++) {
+        let nameIndex = Math.floor(Math.random() * 5);
+        let wordIndex = Math.floor(Math.random() * 100);
+        let key = `${inames[nameIndex]}`;
+        let value = `${iwords[wordIndex]}`;
+        data.push({ [key]: value });
+    }
+
+    const result = data.map(obj => Object.keys(obj)[0]);
+
+    const frequency = result.reduce((acc, value) => {
+        acc[value] = (acc[value] || 0) + 1;
+        return acc;
+    }, {});
+
+    const sortedFrequency = Object.fromEntries(
+        Object.entries(frequency).sort((a, b) => b[1] - a[1])
+    );
+
+    const myObjDiv = document.getElementById("myObj");
+    for (const [key, value] of Object.entries(sortedFrequency)) {
+        const div = document.createElement("div");
+        div.innerText = `${key}: ${value}`;
+        div.style.border = "1px solid black"; // Add border to div element
+        myObjDiv.appendChild(div);
+    }
+</script>
