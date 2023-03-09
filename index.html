@@ -21,7 +21,7 @@
 
     <style>
         * {
-            font-size: 30px;
+            font-size: 20px;
         }
 
         .myCheckbox {
@@ -62,10 +62,20 @@
 </head>
 
 <body>
-
-
-
+    <span class="ms-auto mx-2" id="emailshow"></span>
+    <span class="ms-auto mx-2" id="userName"></span>
+    <div class="bucket mt-3">
+        <div class="mb-3">
+            <input type="email" class="form-control" placeholder="email" id="email">
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" placeholder="pw" id="pw">
+        </div>
+        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+    </div>
     <br>
+    <button id="logout" style="display:none;">로그아웃</button>
+
     <button id="allDelete" class="allDelete">allDelete</button>
     <div class="container mt-3"></div>
     <div class="test"></div>
@@ -77,6 +87,8 @@
 
 <!-- main -->
 <script>
+
+    var email = 'abc@example';
 
     let wordsSet = new Set();
     db.collection('voca_test').get().then((result) => {
