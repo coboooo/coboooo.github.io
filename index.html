@@ -84,9 +84,10 @@
                 <div class="starting"></div>
                 <div class="test"></div>
 
-                <input type="text" id="search" autofocus>
-                <div class="result">111</div>
-                <div id="myObj" class="myObj"></div>
+                <!-- <input type="text" id="search-input" placeholder="" autofocus>
+                <div id="search-results"></div> -->
+
+                <div id="RankingDiv" class="RankingDiv"></div>
 
                 </p>
             </div>
@@ -158,16 +159,6 @@
     var email = emailshow.innerText;
     console.log('emailshow.innerText->' + email);
 
-    let wordsSet = new Set();
-    db.collection('voca_test').get().then((result) => {
-        result.forEach((doc) => {
-            let word = doc.data().word;
-            wordsSet.add(word);
-        });
-        let wordsArray = Array.from(wordsSet); // convert the Set back to an array
-        // console.log(wordsArray); // print the array of unique words
-    });
-
     db.collection('voca_list').get().then((result) => {
         result.forEach((doc) => {
             var template = `
@@ -187,7 +178,7 @@
         checkbox.prop('checked', !checkbox.prop('checked'));
         if (checkbox.prop('checked')) {
             const docId = checkbox.siblings('.docId').text();
-            console.log(`Checkbox with ID ${docId} was checked`);
+            // console.log(`Checkbox with ID ${docId} was checked`);
 
             const word = checkbox.siblings('.word').text();
             const mean = checkbox.siblings('.mean').text();
@@ -233,6 +224,8 @@
             }
         }
     });
+
+
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -306,7 +299,7 @@
         Object.entries(frequency).sort((a, b) => b[1] - a[1])
     );
 
-    const myObjDiv = document.getElementById("myObj");
+    const myObjDiv = document.getElementById("RankingDiv");
     for (const [key, value] of Object.entries(sortedFrequency)) {
         const div = document.createElement("div");
         div.innerText = `${key}: ${value}`;
@@ -317,12 +310,48 @@
 
 <script>
 
+    // Putting words into an array only
+    let wordsArray = [];
+
+    db.collection('voca_test').get().then((result) => {
+        let wordsSet = new Set();
+        result.forEach((doc) => {
+            let word = doc.data().word;
+            wordsSet.add(word);
+        });
+        wordsArray = Array.from(wordsSet); // convert the Set back to an array
+        console.log(wordsArray); // print the array of unique words
+    });
+
+    $('#search-input').on('keyup', function () {
+        search($(this).val());
+    });
+    function search(query) {
+        var results = [];
+        for (var i = 0; i < wordsArray.length; i++) {
+            if (wordsArray[i].toLowerCase().indexOf(query.toLowerCase()) !== -1) {
+                results.push(wordsArray[i]);
+            }
+        }
+        displayResults(results);
+    }
+
+    function displayResults(results) {
+        var container = $('#search-results');
+        container.empty();
+        if (results.length === 0) {
+            container.append('<p>No results found.</p>');
+        } else {
+            for (var i = 0; i < results.length; i++) {
+                container.append('<p>' + results[i] + '</p>');
+            }
+        }
+    }
 </script>
 
 <script>
-    // Email Address
     // Input function
-    // member management
-    // Search function
+    // member management function -> carrot chat course required
     // Studying JavaScript
+    // Studying CSS
 </script>
