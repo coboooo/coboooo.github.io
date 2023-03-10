@@ -79,7 +79,8 @@
                 </div>
                 <span class="ms-auto mx-2" id="emailshow"></span><br>
                 <button id="logout" style="display:none;">로그아웃</button>
-                <button id="allDelete" class="allDelete">DELETEALL</button>
+                <button id="allDelete" class="allDelete">DELETE</button>
+                <button onclick="location.reload();">Refresh</button>
                 <div class="starting"></div>
                 <div class="test"></div>
 
@@ -101,9 +102,61 @@
 
 </html>
 
-<!-- main -->
 <script>
-    var email = 'abc@example';
+
+    const collectionRef = db.collection("product");
+
+    $('#login').click(function () {
+        var 이메일 = $('#email').val();
+        var 패스워드 = $('#pw').val();
+        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
+            // console.log(result.user)
+            $('.bucket').hide();
+            $('#logout').show();
+
+        })
+    })
+
+    var userStr = localStorage.getItem('user');
+    if (userStr) {
+        var userObj = JSON.parse(userStr);
+        $('#emailshow').html(userObj.email);
+        console.log('userObj.email->' + userObj.email);
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            console.log('user.email->' + user.email);
+            localStorage.setItem('user', JSON.stringify(user));
+            // user is logged in, hide the input window
+            $('.bucket').hide();
+            $('#logout').show();
+            $('#emailshow').html(user.email);
+        } else {
+            // user is not logged in, show the input window
+            $('.bucket').show();
+            $('#logout').hide();
+            $('#emailshow').html('');
+        }
+    });
+
+    $('#logout').click(function () {
+        firebase.auth().signOut()
+        localStorage.removeItem('user');
+        $('.bucket').show();
+        $('#logout').hide();
+        $('#userName').hide();
+    })
+    // var email = 'bbb@bbb.com';
+
+</script>
+
+<!----------------------------------- main ----------------------------------------------------------->
+<script>
+
+    const emailshow = document.getElementById('emailshow');
+    var email = emailshow.innerText;
+    console.log('emailshow.innerText->' + email);
 
     let wordsSet = new Set();
     db.collection('voca_test').get().then((result) => {
@@ -112,7 +165,7 @@
             wordsSet.add(word);
         });
         let wordsArray = Array.from(wordsSet); // convert the Set back to an array
-        console.log(wordsArray); // print the array of unique words
+        // console.log(wordsArray); // print the array of unique words
     });
 
     db.collection('voca_list').get().then((result) => {
@@ -138,17 +191,27 @@
 
             const word = checkbox.siblings('.word').text();
             const mean = checkbox.siblings('.mean').text();
+            const date = new Date();
+            const year = String(date.getMonth() + 1).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            const dayAndTime = `${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
+            console.log(dayAndTime);
 
             db.collection('voca_test').add({
                 email: email,
                 word: word,
                 mean: mean,
+                date: dayAndTime,
             });
 
             db.collection('voca_test').get().then((result) => {
                 result.forEach((doc) => {
                     var template = `
-              ${doc.data().email} - ${doc.data().word} - ${doc.data().mean}<br>
+              ${doc.data().email} - ${doc.data().word} - ${doc.data().mean} - ${doc.data().date}<br>
             `;
                     $('.test').append(template);
                 });
@@ -185,7 +248,6 @@
                 doc.ref.delete();
             });
         });
-
     });
 </script>
 
@@ -214,79 +276,12 @@
 
             // Do something with the data
             // alert(data);
-            console.log(data);
+            // console.log(data);
         }
     }
 </script>
 
-<script>
-
-    const collectionRef = db.collection("product");
-
-    // This sets up a click event listener on the login button.
-    // When the button is clicked, it retrieves the email and password from the input fields
-    // and attempts to log the user in using Firebase's signInWithEmailAndPassword method.
-    // If the login is successful, it hides the input window and shows the logout button.
-    $('#login').click(function () {
-        var 이메일 = $('#email').val();
-        var 패스워드 = $('#pw').val();
-        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
-            // console.log(result.user)
-            $('.bucket').hide();
-            $('#logout').show();
-
-        })
-    })
-
-    // This retrieves the user object from local storage and displays their email address.
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        $('#emailshow').html(userObj.email);
-    }
-
-    // This sets up an event listener for changes in the user's authentication state.
-    // If the user is logged in, it saves their user object to local storage and updates the UI.
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log(user.email);
-            localStorage.setItem('user', JSON.stringify(user));
-            // user is logged in, hide the input window
-            $('.bucket').hide();
-            $('#logout').show();
-            $('#emailshow').html(user.email);
-        } else {
-            // user is not logged in, show the input window
-            $('.bucket').show();
-            $('#logout').hide();
-            $('#emailshow').html('');
-        }
-    });
-
-    // This sets up a click event listener on the logout button.
-    // When the button is clicked, it logs the user out of Firebase and removes their user object from local storage.
-    // It also shows the input window and hides the logout button.
-    $('#logout').click(function () {
-        firebase.auth().signOut()
-        localStorage.removeItem('user');
-        $('.bucket').show();
-        $('#logout').hide();
-        $('#userName').hide();
-    })
-
-    // // This checks if the user is already logged in on page load.
-    // // If there is a saved user object in local storage, it attempts to log the user in using signInWithEmailAndPassword.
-    // // If there is an error, it logs it to the console.
-    // var userStr = localStorage.getItem('user');
-    // if (userStr) {
-    //     var userObj = JSON.parse(userStr);
-    //     firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password).catch(function (error) {
-    //         console.log(error);
-    //     });
-    // }
-
-</script>
-
+<!-- ranking -->
 <script>
     const inames = Array.from({ length: 5 }, (_, i) => `name${i + 1}`);
     const iwords = Array.from({ length: 100 }, (_, i) => `word${i + 1}`);
@@ -318,4 +313,16 @@
         div.style.border = "1px solid black"; // Add border to div element
         myObjDiv.appendChild(div);
     }
+</script>
+
+<script>
+
+</script>
+
+<script>
+    // Email Address
+    // Input function
+    // member management
+    // Search function
+    // Studying JavaScript
 </script>
