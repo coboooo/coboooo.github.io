@@ -44,7 +44,7 @@
             <hr>
             <h5 class="title">상품명</h5>
             <p class="date">올린날짜</p>
-            <p class="price">가격</p>
+            <p class="price">날짜</p>
         </div>
     </div>
 </body>
@@ -66,16 +66,16 @@
 
     const db = firebase.firestore();
 
-    var 쿼리스트링 = new URLSearchParams(window.location.search)
-    db.collection('product').doc(쿼리스트링.get('id')).get().then((result) => {
+    var querystring = new URLSearchParams(window.location.search)
+    db.collection('product').doc(querystring.get('id')).get().then((result) => {
         console.log(result.data())
-        $('.title').html(result.data().제목)
-        $('.date').html(result.data().날짜)
-        $('.price').html(result.data().가격)
+        $('.title').html(result.data().title)
+        $('.date').html(result.data().date)
+        $('.price').html(result.data().price)
     })
     
-    // db.collection('product').doc('상품3').set({ 제목: '변기' })
-    db.collection('sss').add({ 제목: '변기' })
+    // db.collection('product').doc('상품3').set({ title: '변기' })
+    db.collection('sss').add({ title: '변기' })
 
     // function showYourLocation(position) {
     //     var userLat = position.coords.latitude;

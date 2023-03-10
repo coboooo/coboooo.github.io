@@ -39,7 +39,7 @@
 
     <style>
         * {
-            font-size: 50px;
+            font-size: 30px;
         }
     </style>
 
@@ -61,7 +61,7 @@
     <br>
 
     <span class="ms-auto mx-2" id="userName"></span>
-    <div class="container mt-3">
+    <div class="banana mt-3">
         <div class="mb-3">
             <input type="email" class="form-control" placeholder="email" id="email">
         </div>
@@ -69,10 +69,11 @@
             <input type="password" class="form-control" placeholder="pw" id="pw">
         </div>
         <button type="submit" class="btn btn-primary" id="login">로그인a하기</button>
+        <br>
+        <button id="logout" style="display:none;">로그아웃</button>
     </div>
+
 </body>
-<br>
-<button id="logout" style="display:none;">로그아웃</button>
 
 <script>
 
@@ -84,7 +85,7 @@
         var 패스워드 = $('#pw').val();
         firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
             // console.log(result.user)
-            $('.container').hide();
+            $('.banana').hide();
             $('#logout').show();
             $('#userName').text(userObj.displayName + '님, 로그인이 완료되었습니다.').show();
         })
@@ -93,7 +94,7 @@
     // logout
     $('#logout').click(function () {
         firebase.auth().signOut()
-        $('.container').show();
+        $('.banana').show();
         $('#logout').hide();
         $('#userName').hide();
     })
@@ -101,20 +102,25 @@
     var userStr = localStorage.getItem('user');
     if (userStr) {
         var userObj = JSON.parse(userStr);
-        // $('#userName').html(userObj.displayName);
+        $('#userName').html(userObj.displayName);
     }
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            console.log(uid);
-            console.log(displayName);
+            // console.log(uid);
+            // console.log(displayName);
             localStorage.setItem('user', JSON.stringify(user));
         }
+        else {
+            localStorage.removeItem('user');
+        }
     });
+
+    ////////////////////////////////////////////////////////////////////////////
 
     // var file = document.querySelector('#image').files[0];
     // var storageRef = storage.ref();
     // var 저장할경로 = storageRef.child('image/' + file.name);
-    // var 업로드작업 = 저장할경로.put(file)
+    // var upload = 저장할경로.put(file)
 
     $('#delete').click(function () {
         collectionRef.get().then((result) => {
@@ -164,7 +170,7 @@
 </script>
 
 <script>
-    // db.collection('product').doc('상품3').set({ 제목: '변기' })
+    // db.collection('product').doc('상품3').set({ title: '변기' })
 
     // var chatRef = firebase.database().ref("i_data");
     // var stringArray = [1, 2, 3];

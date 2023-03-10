@@ -54,7 +54,7 @@
 
     const db = firebase.firestore();
 
-    db.collection('product').add({ 제목: '변기' })
+    // db.collection('product').add({ title: '변기' })
 
     // db.collection('product').get().then((result) => {
     //     result.forEach((doc) => {
@@ -65,10 +65,10 @@
     const storage = firebase.storage();
     var file = document.querySelector('#image').files[0];
     var storageRef = storage.ref();
-    var 저장할경로 = storageRef.child('image/' + new Date + '.png');
-    var 업로드작업 = 저장할경로.put(file)
+    var path = storageRef.child('image/' + new Date + '.png');
+    var upload = path.put(file)
 
-    업로드작업.on('state_changed',
+    upload.on('state_changed',
         // 변화시 동작하는 함수 
         null,
         //에러시 동작하는 함수
@@ -77,14 +77,15 @@
         },
         // 성공시 동작하는 함수
         () => {
-            업로드작업.snapshot.ref.getDownloadURL().then((url) => {
+            upload.snapshot.ref.getDownloadURL().then((url) => {
                 $('#send').click(function () {
                     var 저장할거 = {
-                        제목: $('#title').val(),
-                        가격: $('#price').val(),
-                        내용: $('#content').val(),
-                        날짜: new Date(),
-                        // 이미지: url
+                        title: $('#title').val(),
+                        price: $('#price').val(),
+                        contents: $('#content').val(),
+                        date: new Date(),
+                        uid: JSON.parse(localStorage.getItem('user')).uid,
+                        name: JSON.parse(localStorage.getItem('user')).displayName
                     }
                     db.collection('product').add(저장할거)
                         .then((result) => {

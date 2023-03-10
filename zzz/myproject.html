@@ -93,7 +93,7 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
 
-    db.collection('voca').add({ 제목: 'dd' })
+    db.collection('voca').add({ title: 'dd' })
 
     db.collection('voca').get().then((result) => {
         result.forEach((doc) => {
@@ -143,9 +143,9 @@
         firebase.auth().signOut()
     })
 
-    // db.collection('product').doc('상품3').set({ 제목: '변기' })
+    // db.collection('product').doc('상품3').set({ title: '변기' })
     // db.collection('voca').add({
-    //     제목: '변기',
+    //     title: '변기',
     //     뜻: 'Request'
     // })
 

@@ -55,6 +55,7 @@
             font-weight: 600;
         }
     </style>
+
     <script>
         // Your web app's Firebase configuration
         // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -72,92 +73,32 @@
 
         const db = firebase.firestore();
         const storage = firebase.storage();
-
     </script>
+
 </head>
 
 <body>
-    <span class="ms-auto mx-2" id="userName"></span>
-
-    <div class="container mt-3">
-        <div class="mb-3">
-            <input type="text" class="form-control" placeholder="name" id="name-new">
-        </div>
-        <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email-new">
-        </div>
-        <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw-new">
-        </div>
-        <button type="submit" class="btn btn-primary" id="register">가입하기</button>
-    </div>
-
-    <div class="banana mt-3">
-        <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email">
-        </div>
-        <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw">
-        </div>
-        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
-        <br>
-    </div>
+    <span class="ms-auto mx-2" id="userName">유저이름</span>
     <button id="logout">로그아웃</button>
+    </div>
 </body>
 
 <script>
 
-    // Sign up with password
-    $('#register').click(function () {
-
-        var 이메일 = $('#email-new').val();
-        var 패스워드 = $('#pw-new').val();
-        var 이름 = $('#name-new').val();
-
-        firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result) => {
-
-            // var userData = { name: 이름, email: 이메일 }
-            db.collection('user').doc(result.user.uid).set({ name: 이름, email: 이메일 })
-
-            result.user.updateProfile({ displayName: 이름 })
-            console.log(result.user)
-            alert(result.user);
-        })
-    })
-
-    // login with password
-    $('#login').click(function () {
-        var 이메일 = $('#email').val();
-        var 패스워드 = $('#pw').val();
-        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
-            // console.log(result.user)
-            $('.banana').hide();
-            $('#userName').text(userObj.displayName + '님, 로그인이 완료되었습니다.').show();
-        })
-    })
-
-    // logout
-    $('#logout').click(function () {
-        firebase.auth().signOut()
-        $('.banana').show();
-        $('#userName').hide();
-    })
-
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        $('#userName').html(userObj.displayName);
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log(user)
+        localStorage.setItem('user', JSON.stringify(user))
+        $('#userName').html(user.displayName)
+    } else {
+        localStorage.removeItem('user')
+        $('#userName').html('유저이름')
     }
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            // console.log(uid);
-            // console.log(displayName);
-            localStorage.setItem('user', JSON.stringify(user));
-        }
-        else {
-            localStorage.removeItem('user');
-        }
-    });
+})
+
+</script>
+<script>
+
 </script>
 
 </html>

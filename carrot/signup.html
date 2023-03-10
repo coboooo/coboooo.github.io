@@ -41,7 +41,7 @@
         </div>
         <button type="submit" class="btn btn-primary" id="register">가입하기</button>
     </div>
-    <div class="container mt-3">
+    <!-- <div class="container mt-3">
         <div class="mb-3">
             <input type="email" class="form-control" placeholder="email" id="email">
         </div>
@@ -49,7 +49,7 @@
             <input type="password" class="form-control" placeholder="pw" id="pw">
         </div>
         <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
-    </div>
+    </div> -->
 </body>
 
 <script>
@@ -76,26 +76,34 @@
         var 이름 = $('#name-new').val();
 
         firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result) => {
-            console.log(result.user)
+
+            // var userData = { name: 이름, email: 이메일 }
+            db.collection('user').doc(result.user.uid).set({ name: 이름, email: 이메일 })
+
             result.user.updateProfile({ displayName: 이름 })
-            alert();
+            console.log(result.user)
+            alert(result.user);
         })
     })
 
-    var 뺀거 = localStorage.getItem('user');
-    $('#userName').html(JSON.parse(뺀거.displayName))
+/////////////////////////////////////////////////////////////////////////
+
+    var extraction = localStorage.getItem('user');
+    if (extraction !== null) {
+        var user = JSON.parse(extraction);
+        $('#userName').html(user.displayName);
+    }
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             console.log(user)
             localStorage.setItem('user', JSON.stringify(user))
         }
     })
-    db.collection('product').doc('상품3').set({ 제목: '변기' })
-    db.collection('product').add({ 제목: '변기' })
 
 </script>
 <script>
-
+    // db.collection('product').doc('상품3').set({ title: '변기' })
+    // db.collection('product').add({ title: '변기' })
 </script>
 
-</html>`
+</html>
