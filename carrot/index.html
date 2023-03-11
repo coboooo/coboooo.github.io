@@ -20,7 +20,7 @@
 
     <style>
         * {
-            font-size: 20px;
+            font-size: 25px;
         }
 
         .product {
@@ -76,24 +76,51 @@
     <a href="upload.html"><button>upload</button></a>
     <a href="signin.html"><button>signin</button></a>
     <!-- <a href="signup.html"><button>signup</button></a> -->
-    <div class="container mt-3"></div>
+    <div class="pizza"></div>
 
 </body>
 <script>
-    
+
 </script>
 <script>
 
+    var userStr = localStorage.getItem('user');
+    if (userStr) {
+        var userObj = JSON.parse(userStr);
+        console.log(userObj.displayName);
+    }
+
+    var userStr = localStorage.getItem('user');
+    if (userStr) {
+        var user = JSON.parse(userStr);
+        console.log('User UID:', user.uid);
+    }
+
+    // db.collection('products')
+    //     .where('title', '==', "배추")
+    //     .get()
+    //     .then((querySnapshot) => {
+    //         querySnapshot.forEach((doc) => {
+    //             console.log(doc.id);
+    //         });
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //     });
+
+    ////////////////////////////////////////////////////////////////////////////////
+
     db.collection('product').get().then((result) => {
         result.forEach((doc) => {
-            console.log(doc)
+            // console.log(doc)
             var template = `
              <a href="detail.html?id=${doc.id}"> ${doc.data().title} </a>
+             ${doc.data().name}
              ${doc.data().price}
              ${doc.data().date}
              <br>
             `;
-            $('.container').append(template)
+            $('.pizza').append(template)
         })
     })
 
@@ -124,7 +151,7 @@
 </script>
 
 </html>
-<br><br>
+<br>
 <div class="myElement1" style="border:1px solid;">1</div>
 <div class="myElement2" style="border:1px solid;">1</div>
 <div class="myElement3" style="border:1px solid;">1</div>

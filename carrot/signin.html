@@ -150,8 +150,9 @@
     }
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            // console.log(uid);
-            // console.log(displayName);
+            // console.log(user);
+            console.log(user.uid);
+            console.log(user.displayName);
             localStorage.setItem('user', JSON.stringify(user));
         }
         else {
