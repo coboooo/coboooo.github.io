@@ -72,32 +72,35 @@
         </nav>
     </header>
 
-    <main class="container my-5">
-
-        <div class="table mt-3">
-            <div class="bucket mt-3">
-                <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="email" id="email">
+    <main class="container my-1">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <div class="bucket mt-3">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="email" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="pw" id="pw">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
                 </div>
-                <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="pw" id="pw">
+                <button id="logout" class="btn btn-danger" style="display:none;">로그아웃</button>
+                <span class="ms-auto mx-2" id="showEmail"></span>
+            </div>
+            <div class="col-md-4 table">
+                <br>
+                <button id="allDelete" class="btn btn-danger">Delete</button>
+                <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
+                <button class="btn btn-success submit-btn">Submit</button>
+                <!-- <div class="alert alert-success success"></div> -->
+                <hr>
+                <div class="container">
                 </div>
-                <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
             </div>
-            <button id="logout" class="btn btn-danger" style="display:none;">로그아웃</button>
-            <span class="ms-auto mx-2" id="emailshow"></span>
-
-            <button id="allDelete" class="btn btn-danger">Delete</button>
-            <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
-            <button class="btn btn-success submit-btn">Submit</button>
-            <!-- <div class="alert alert-success success"></div> -->
-            <hr>
-            <div class="container">
-
+            <div class="col-md-4 mx-1">
+                1
             </div>
-
         </div>
-
     </main>
 
     <footer class="bg-light py-3">
@@ -127,7 +130,7 @@
     var userStr = localStorage.getItem('user');
     if (userStr) {
         var userObj = JSON.parse(userStr);
-        $('#emailshow').html(userObj.email);
+        $('#showEmail').html(userObj.email);
     }
 
     firebase.auth().onAuthStateChanged((user) => {
@@ -137,12 +140,12 @@
             // user is logged in, hide the input window
             $('.bucket').hide();
             $('#logout').show();
-            $('#emailshow').html(user.email);
+            $('#showEmail').html(user.email);
         } else {
             // user is not logged in, show the input window
             $('.bucket').show();
             $('#logout').hide();
-            $('#emailshow').html('');
+            $('#showEmail').html('');
         }
     });
 
