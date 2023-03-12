@@ -162,22 +162,28 @@
 <script>
 
     // read
-    db.collection('voca_list').get().then((result) => {
-        result.forEach((doc) => {
-            var template = `
-            <div class="container">
-                <div class="row">
-                    <div class="col-4 border" style="text-align: right;">${doc.data().word}</div>
-                    <div class="col-4 border">
-                        <input type="text" value="" class="form-control">
-                    </div>
-                    <div class="col-4 border cell3" style="display: none;">${doc.data().mean}</div>
+    console.log('Before get');
+db.collection('voca_list').get().then((result) => {
+    console.log('Inside then');
+    result.docs.forEach((doc, index) => {
+        console.log('Inside forEach');
+        var template = `
+        <div class="container">
+            <div class="row">
+                <div class="col-4 border" style="text-align: right;">${doc.data().word}</div>
+                <div class="col-4 border">
+                    <input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}>
                 </div>
+                <div class="col-4 border cell3" style="display: none;">${doc.data().mean}</div>
             </div>
-            `
-            $('.table').append(template);
-        });
+        </div>
+        `
+        $('.table').append(template);
     });
+}).catch((error) => {
+    console.log('Error:', error);
+});
+console.log('After get');
 
     var inputs = document.querySelectorAll('input[type="text"]');
     var count = 0;
