@@ -40,56 +40,107 @@
         const db = firebase.firestore();
     </script>
 
+    <style>
+        .line-bucket {
+            background-color: rgb(236, 236, 236);
+            margin: 10px;
+            transition: background-color 0.1s ease;
+        }
+
+        .line-bucket:hover {
+            background-color: rgb(255, 161, 161);
+            margin: 10px;
+        }
+    </style>
+
 </head>
 
 <body>
-    <div class="container">
-      <form id="loginForm">
-        <div class="bucket mt-3">
-          <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email">
-          </div>
-          <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw">
-          </div>
-          <button type="submit" class="btn btn-primary" id="login">로그인</button>
+    <header>
+        <div class="navbar navbar-dark bg-primary box-shadow">
+            <div class="container">
+                <strong class="text-white h3">aaa</strong>
+                <div class="text-white ms-auto">signup</div>
+            </div>
         </div>
-      </form>
-      <button id="logout" style="display:none;">로그아웃</button>
-    </div>
-  
-    <script>
-      const collectionRef = db.collection("product");
-  
-      $('#loginForm').submit(function (event) {
-        event.preventDefault();
+    </header>
+
+    <main role="main">
+        <section class="jumbotron">
+            <div class="container">
+                <p class="lead">
+                <div class="bucket mt-3">
+                    <div class="mb-3">
+                        <input type="email" class="form-control" placeholder="email" id="email">
+                    </div>
+                    <div class="mb-3">
+                        <input type="password" class="form-control" placeholder="pw" id="pw">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="login">로그인</button>
+                </div>
+                <span class="ms-auto mx-2" id="emailshow"></span><br>
+                <button id="logout" style="display:none;">로그아웃</button>
+                <button id="allDelete" class="allDelete">DELETE</button>
+                <button onclick="location.reload();">Refresh</button>
+                <div class="starting"></div>
+                <div class="test"></div>
+
+                <!-- <input type="text" id="search-input" placeholder="" autofocus>
+                <div id="search-results"></div> -->
+
+                <div id="RankingDiv" class="RankingDiv"></div>
+
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-muted">
+        <div class="container">
+            <p>... &copy; ...</p>
+        </div>
+    </footer>
+</body>
+
+</html>
+<script>
+    const collectionRef = db.collection("product");
+
+    $('#login').click(function () {
         var 이메일 = $('#email').val();
         var 패스워드 = $('#pw').val();
         firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
-          $('.bucket').hide();
-          $('#logout').show();
-        });
-      });
-  
-      var userStr = localStorage.getItem('user');
-      if (userStr) {
+            // console.log(result.user)
+            $('.bucket').hide();
+            $('#logout').show();
+            location.reload();
+        })
+    })
+
+    var userStr = localStorage.getItem('user');
+    if (userStr) {
         var userObj = JSON.parse(userStr);
         $('#emailshow').html(userObj.email);
-      }
-  
-      firebase.auth().onAuthStateChanged((user) => {
+        console.log('userObj.email->' + userObj.email);
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          localStorage.setItem('user', JSON.stringify(user));
-          $('.bucket').hide();
-          $('#logout').show();
-          $('#emailshow').html(user.email);
+            console.log('user.email->' + user.email);
+            localStorage.setItem('user', JSON.stringify(user));
+            // user is logged in, hide the input window
+            $('.bucket').hide();
+            $('#logout').show();
+            $('#emailshow').html(user.email);
         } else {
-          $('.bucket').show();
-          $('#logout').hide();
-          $('#emailshow').html('');
+            // user is not logged in, show the input window
+            $('.bucket').show();
+            $('#logout').hide();
+            $('#emailshow').html('');
         }
-      });
-  
-    </script>
-  </body>
-  
+    });
+
+ 
+
+</script>
+

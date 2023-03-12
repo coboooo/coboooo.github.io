@@ -1,4 +1,4 @@
-<label for="input1">Input 1:</label>
+<!-- <label for="input1">Input 1:</label>
 <input type="text" id="input1" onkeydown="moveToNextInput(event, 'input2')">
 <br>
 <label for="input2">Input 2:</label>
@@ -18,4 +18,38 @@
             }
         }
     }
+</script> -->
+
+<style>
+ 
+</style>
+
+<style>
+    input {
+        display: block;
+        margin-bottom: 10px; /* Add some space between the inputs */
+    }
+    .invisible { 
+        display: none;
+    }
+</style>
+
+<div id="inputs"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        for (var i = 1; i <= 6; i++) {
+            var input = $('<input>', {
+                type: 'text',
+                class: 'invisible',
+                name: 'input' + i,
+                id: 'input' + i
+            });
+            $('#inputs').append(input);
+        }
+        $('#inputs input').removeClass('invisible'); // Show the inputs
+    });
+
 </script>
