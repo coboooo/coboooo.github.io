@@ -80,10 +80,6 @@
 
     const collectionRef = db.collection("product");
 
-    // This sets up a click event listener on the login button.
-    // When the button is clicked, it retrieves the email and password from the input fields
-    // and attempts to log the user in using Firebase's signInWithEmailAndPassword method.
-    // If the login is successful, it hides the input window and shows the logout button.
     $('#login').click(function () {
         var 이메일 = $('#email').val();
         var 패스워드 = $('#pw').val();
@@ -95,15 +91,12 @@
         })
     })
 
-    // This retrieves the user object from local storage and displays their email address.
     var userStr = localStorage.getItem('user');
     if (userStr) {
         var userObj = JSON.parse(userStr);
         $('#emailshow').html(userObj.email);
     }
 
-    // This sets up an event listener for changes in the user's authentication state.
-    // If the user is logged in, it saves their user object to local storage and updates the UI.
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             console.log(user.email);
@@ -120,9 +113,6 @@
         }
     });
 
-    // This sets up a click event listener on the logout button.
-    // When the button is clicked, it logs the user out of Firebase and removes their user object from local storage.
-    // It also shows the input window and hides the logout button.
     $('#logout').click(function () {
         firebase.auth().signOut()
         localStorage.removeItem('user');
@@ -130,17 +120,6 @@
         $('#logout').hide();
         $('#userName').hide();
     })
-
-    // // This checks if the user is already logged in on page load.
-    // // If there is a saved user object in local storage, it attempts to log the user in using signInWithEmailAndPassword.
-    // // If there is an error, it logs it to the console.
-    // var userStr = localStorage.getItem('user');
-    // if (userStr) {
-    //     var userObj = JSON.parse(userStr);
-    //     firebase.auth().signInWithEmailAndPassword(userObj.email, userObj.password).catch(function (error) {
-    //         console.log(error);
-    //     });
-    // }
 
 </script>
 

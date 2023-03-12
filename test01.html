@@ -1,0 +1,21 @@
+<label for="input1">Input 1:</label>
+<input type="text" id="input1" onkeydown="moveToNextInput(event, 'input2')">
+<br>
+<label for="input2">Input 2:</label>
+<input type="text" id="input2" onkeydown="moveToNextInput(event, 'input3')">
+<br>
+<label for="input3">Input 3:</label>
+<input type="text" id="input3" onkeydown="moveToNextInput(event, null)">
+
+<script>
+    function moveToNextInput(event, nextId) {
+        if (event.keyCode === 13) {
+            var currentElement = event.target;
+            var nextElement = document.getElementById(nextId);
+            if (nextElement) {
+                event.preventDefault();
+                nextElement.focus();
+            }
+        }
+    }
+</script>

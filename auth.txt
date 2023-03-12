@@ -10,8 +10,8 @@ match /product/{docid} {
   allow read : if true;
   allow create : if request.auth != null
   && request.resource.data.keys().hasOnly(['제목', '내용', '가격'])
-  && request.resource.data.제목.size() > 0
-  && request.resource.data.제목 is string
+  && request.resource.data.title.size() > 0
+  && request.resource.data.title is string
 
   allow update : if request.auth.uid == resource.data.uid
   || get(/databases/$(database)/documents/user/$(request.auth.uid)).data.role == 'admin';
