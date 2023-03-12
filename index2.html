@@ -108,6 +108,7 @@
 <script>
     // blink issue
     // member management function -> carrot chat course required
+    // Input function
     // Studying JavaScript
     // Studying CSS
 </script>
@@ -182,42 +183,42 @@
         })
     });
 
-    $('.starting').on('click', '.line-bucket', (event) => {
-        const checkbox = $(event.currentTarget).find('.myCheckbox');
-        checkbox.prop('checked', !checkbox.prop('checked'));
-        if (checkbox.prop('checked')) {
-            const docId = checkbox.siblings('.docId').text();
-            // console.log(`Checkbox with ID ${docId} was checked`);
+    // $('.starting').on('click', '.line-bucket', (event) => {
+    //     const checkbox = $(event.currentTarget).find('.myCheckbox');
+    //     checkbox.prop('checked', !checkbox.prop('checked'));
+    //     if (checkbox.prop('checked')) {
+    //         const docId = checkbox.siblings('.docId').text();
+    //         // console.log(`Checkbox with ID ${docId} was checked`);
 
-            const word = checkbox.siblings('.word').text();
-            const mean = checkbox.siblings('.mean').text();
-            const date = new Date();
-            const year = String(date.getMonth() + 1).padStart(2, '0');
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            const hours = String(date.getHours()).padStart(2, '0');
-            const minutes = String(date.getMinutes()).padStart(2, '0');
-            const seconds = String(date.getSeconds()).padStart(2, '0');
-            const dayAndTime = `${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
-            console.log(dayAndTime);
+    //         const word = checkbox.siblings('.word').text();
+    //         const mean = checkbox.siblings('.mean').text();
+    //         const date = new Date();
+    //         const year = String(date.getMonth() + 1).padStart(2, '0');
+    //         const month = String(date.getMonth() + 1).padStart(2, '0');
+    //         const day = String(date.getDate()).padStart(2, '0');
+    //         const hours = String(date.getHours()).padStart(2, '0');
+    //         const minutes = String(date.getMinutes()).padStart(2, '0');
+    //         const seconds = String(date.getSeconds()).padStart(2, '0');
+    //         const dayAndTime = `${year}:${month}:${day}:${hours}:${minutes}:${seconds}`;
+    //         console.log(dayAndTime);
 
-            db.collection('voca_test').add({
-                email: email,
-                word: word,
-                mean: mean,
-                date: dayAndTime,
-            });
+    //         db.collection('voca_test').add({
+    //             email: email,
+    //             word: word,
+    //             mean: mean,
+    //             date: dayAndTime,
+    //         });
 
-            db.collection('voca_test').get().then((result) => {
-                result.forEach((doc) => {
-                    var template = `
-                        ${doc.data().email} - ${doc.data().word} - ${doc.data().mean} - ${doc.data().date}<br>
-                    `;
-                    $('.test').append(template);
-                });
-            });
-        }
-    });
+    //         db.collection('voca_test').get().then((result) => {
+    //             result.forEach((doc) => {
+    //                 var template = `
+    //           ${doc.data().email} - ${doc.data().word} - ${doc.data().mean} - ${doc.data().date}<br>
+    //         `;
+    //                 $('.test').append(template);
+    //             });
+    //         });
+    //     }
+    // });
 
     db.collection('voca_list').get().then((querySnapshot) => {
         const numDocuments = querySnapshot.size;
@@ -233,7 +234,6 @@
             }
         }
     });
-
 
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -356,17 +356,5 @@
             }
         }
     }
-</script>
-
-<script>
-    const myObj = {
-        name: "John",
-        age: 30
-    };
-
-    const descriptor = Object.getOwnPropertyDescriptor(myObj, "name");
-
-    console.log(descriptor);
-
 </script>
 
