@@ -68,7 +68,7 @@
                             <a class="nav-link" href="#">About</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a><input>
+                            <a class="nav-link" href="#">Contact</a>
                         </li>
                     </ul>
                 </div>
@@ -171,7 +171,7 @@
                     <div class="col-4 border">
                         <input type="text" value="" class="form-control">
                     </div>
-                    <div class="col-4 border cell3">${doc.data().mean}</div>
+                    <div class="col-4 border cell3" style="display: none;">${doc.data().mean}</div>
                 </div>
             </div>
             `
@@ -216,9 +216,7 @@
 
         $(this).css('background-color', 'Ivory');
         // this.disabled = true;
-        var parentRow = $(this).closest('.row');
-        var cell3 = parentRow.find('.cell3');
-        cell3.css('display', 'table-cell');
+        $(this).parent().siblings('.cell3').css('display', 'table-cell');
     });
 
     $('#allDelete').click(() => {
