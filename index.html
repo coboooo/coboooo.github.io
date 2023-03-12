@@ -42,6 +42,10 @@
         /* * {
             font-size: 15px;
         } */
+
+        .table-cell {
+            display: none;
+        }
     </style>
 
 </head>
@@ -162,14 +166,14 @@
         result.forEach((doc) => {
             var template = `
             <div class="container">
-    <div class="row">
-        <div class="col-4 border" style="text-align: right;">${doc.data().word}</div>
-        <div class="col-4 border">
-            <input type="text" value="" class="form-control">
-        </div>
-        <div class="col-4 border">${doc.data().mean}</div>
-    </div>
-</div>
+                <div class="row">
+                    <div class="col-4 border" style="text-align: right;">${doc.data().word}</div>
+                    <div class="col-4 border">
+                        <input type="text" value="" class="form-control">
+                    </div>
+                    <div class="col-4 border cell3">${doc.data().mean}</div>
+                </div>
+            </div>
             `
             $('.table').append(template);
         });
@@ -235,10 +239,10 @@
     db.collection('voca_list').get().then((querySnapshot) => {
         const numDocuments = querySnapshot.size;
         if (numDocuments == 0) {
-            const words = ['apple', 'banana', 'cherry', 'grape', 'kiwi', 'lemon', 'orange', 'pear', 'strawberry', 'watermelon'];
+            const words = ['apple ', 'banana', 'cherry', 'grape', 'kiwi', 'lemon'];
             for (let i = 0; i < 6; i++) {
                 const word = words[i];
-                const mean = `{${word}}`;
+                const mean = `{${word} ${word} ${word} ${word} ${word} ${word}}`;
                 db.collection('voca_list').add({
                     word,
                     mean
