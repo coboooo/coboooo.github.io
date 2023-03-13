@@ -184,3 +184,13 @@
         loginForm.addEventListener("submit", onLoginSubmit);
     }
 </script>
+
+<script src="https://unpkg.com/compromise"></script>
+<script>
+    var t = window.nlp('dinosaur').nouns().toPlural()
+    console.log(t.out('text'))
+    var sentence = "The big, red ball bounced down the street.";
+    var adjectives = nlp(sentence).adjectives().out('array');
+    console.log(adjectives);
+</script>
+

@@ -61,13 +61,12 @@
         <div class="bucket mt-3">
             <input type="email" class="form-control" placeholder="email" id="email">
             <input type="password" class="form-control" placeholder="pw" id="pw">
-            <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+            <button type="submit" class="btn btn-primary" id="login">로그인</button>
         </div>
-        <button id="logout" class="btn btn-success" style="display:none;">로그아웃</button>
-        <span class="ms-auto mx-2" id="showEmail"></span>
-        <br>
         <button id="allDelete" class="btn btn-danger">Delete</button>
         <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
+        <button id="logout" class="btn btn-success" style="display:none;">로그아웃</button>
+        <span class="ms-auto mx-2" id="showEmail"></span>
     </div>
     <div class="border-primary m-2">
 
@@ -117,7 +116,7 @@
             </tbody>
             <tbody>
                 <tr>
-                    <td colspan="4">1</td>
+                    <td colspan="4">.</td>
                 </tr>
             </tbody>
                 `
@@ -301,11 +300,3 @@
     });
 </script>
 
-<script src="https://unpkg.com/compromise"></script>
-<script>
-    var t = window.nlp('dinosaur').nouns().toPlural()
-    console.log(t.out('text'))
-    var sentence = "The big, red ball bounced down the street.";
-    var adjectives = nlp(sentence).adjectives().out('array');
-    console.log(adjectives);
-</script>
