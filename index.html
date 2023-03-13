@@ -51,152 +51,92 @@
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">My Website</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a><input>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">About</a><input>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a><input>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
 
-    <main class="container my-1">
-        <div class="row g-0">
-            <div class="col-md-4">
-                <div class="bucket mt-3">
-                    <div class="mb-3">
-                        <input type="email" class="form-control" placeholder="email" id="email">
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" class="form-control" placeholder="pw" id="pw">
-                    </div>
-                    <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
-                </div>
-                <button id="logout" class="btn btn-danger" style="display:none;">로그아웃</button>
-                <span class="ms-auto mx-2" id="showEmail"></span>
-            </div>
-            <div class="col-md-4 table">
-                <div class="alert alert-success success">
-                    <button id="allDelete" class="btn btn-danger">Delete</button>
-                    <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
-                </div>
-                <div class="alert alert-success success"></div>
-                안녕하세요.
-                <div class="container"> </div>
-            </div>
-            <button class="btn btn-success submit-btn">Submit</button>
-            <div class="userVocaTest"></div>
-        </div>
-    </main>
-
-    <footer class="bg-light py-3">
-        <div class="container">
-            <p>Copyright &copy; 2023</p>
-        </div>
-    </footer>
 </body>
 
 </html>
 
-<!-- log in -->
-<script>
+<div class="container">
+    <div class="border border-primary m-2">
+        <div class="bucket mt-3">
+            <input type="email" class="form-control" placeholder="email" id="email">
+            <input type="password" class="form-control" placeholder="pw" id="pw">
+            <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+        </div>
+        <button id="logout" class="btn btn-success" style="display:none;">로그아웃</button>
+        <span class="ms-auto mx-2" id="showEmail"></span>
+        <br>
+        <button id="allDelete" class="btn btn-danger">Delete</button>
+        <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
+    </div>
+    <div class="border border-primary m-2">
 
-    const collectionRef = db.collection("product");
+        <table class="mainContents table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 10%;">1</th>
+                    <th>1</th>
+                    <th>1</th>
+                    <th>1</th>
+                </tr>
+            </thead>
+        </table>
 
-    $('#login').click(function () {
-        var 이메일 = $('#email').val();
-        var 패스워드 = $('#pw').val();
-        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
-            // console.log(result.user)
-            $('.bucket').hide();
-            $('#logout').show();
+    </div>
+    <button class="btn btn-primary w-100" style="padding: 20px;">Full Width Button</button>
+    <div class="border border-primary m-2">
 
-        })
-    })
+        <table class="userVocaTest table table-bordered">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 10%;">1</th>
+                    <th>1</th>
+                    <th>1</th>
+                    <th>1</th>
+                    <th>1</th>
+                </tr>
+            </thead>
+        </table>
 
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        $('#showEmail').html(userObj.email);
-    }
+    </div>
+</div>
 
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log(user.email);
-            localStorage.setItem('user', JSON.stringify(user));
-            // user is logged in, hide the input window
-            $('.bucket').hide();
-            $('#logout').show();
-            $('#showEmail').html(user.email);
-        } else {
-            // user is not logged in, show the input window
-            $('.bucket').show();
-            $('#logout').hide();
-            $('#showEmail').html('');
-        }
-    });
-
-    $('#logout').click(function () {
-        firebase.auth().signOut()
-        localStorage.removeItem('user');
-        $('.bucket').show();
-        $('#logout').hide();
-    })
-
-</script>
 
 <script>
     // read
     db.collection('voca_list').get().then((result) => {
         result.docs.forEach((doc, index) => {
             var template = `
-        <div class="container">
-            <div class="row">
-                <div class="col-3 border" style="text-align: right;">${index+1}</div>
-                <div class="col-3 border" style="text-align: right;">${doc.data().word}</div>
-                <div class="col-3 border">
-                    <input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}>
-                </div>
-                <div class="col-3 border cell3" style="display: none;">${doc.data().mean}</div>
-            </div>
-        </div>
-        `
-            $('.table').append(template);
+            <tbody>
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${doc.data().word}</td>
+                    <td><input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}></td>
+                    <td>${doc.data().mean}</td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td colspan="4">1</td>
+                </tr>
+            </tbody>
+                `
+            $('.mainContents').append(template);
         });
-    }).catch((error) => {
-        console.log('Error:', error);
-    });
-
-
+    })
 
     db.collection('voca_test').get().then((result) => {
         result.docs.forEach((doc, index) => {
             var template = `
-        <div class="container">
-            <div class="row">
-                <div class="col-1 border">${doc.data().email}</div>
-                <div class="col-1 border">${doc.data().word}</div>
-                <div class="col-1 border">${doc.data().idea}</div>
-                <div class="col-1 border">${doc.data().mean}</div>
-                <div class="col-1 border">${doc.data().dayAndTime}</div>
-            </div>
-        </div>
+            <tbody>
+                <tr>
+                    <td>${doc.data().email}</td>
+                    <td>${doc.data().word}</td>
+                    <td>${doc.data().idea}</td>
+                    <td>${doc.data().mean}</td>
+                    <td>${doc.data().dayAndTime}</td>
+                </tr>
+            </tbody>
         `
             $('.userVocaTest').append(template);
         });
@@ -271,4 +211,101 @@
         }
     });
 
+</script>
+
+
+<!-- log in -->
+<script>
+
+    const collectionRef = db.collection("product");
+
+    $('#login').click(function () {
+        var 이메일 = $('#email').val();
+        var 패스워드 = $('#pw').val();
+        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
+            // console.log(result.user)
+            $('.bucket').hide();
+            $('#logout').show();
+
+        })
+    })
+
+    var userStr = localStorage.getItem('user');
+    if (userStr) {
+        var userObj = JSON.parse(userStr);
+        $('#showEmail').html(userObj.email);
+    }
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            console.log(user.email);
+            localStorage.setItem('user', JSON.stringify(user));
+            // user is logged in, hide the input window
+            $('.bucket').hide();
+            $('#logout').show();
+            $('#showEmail').html(user.email);
+        } else {
+            // user is not logged in, show the input window
+            $('.bucket').show();
+            $('#logout').hide();
+            $('#showEmail').html('');
+        }
+    });
+
+    $('#logout').click(function () {
+        firebase.auth().signOut()
+        localStorage.removeItem('user');
+        $('.bucket').show();
+        $('#logout').hide();
+    })
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<canvas id="myChart"></canvas>
+<script>
+    const data = {
+        labels: ['user1', 'user2', 'user3'],
+        datasets: [{
+            label: 'User Ranking',
+            data: [5, 4, 1],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+
+    const options = {
+        indexAxis: 'y', // to change the vertical axis
+        scales: {
+            x: {
+                beginAtZero: true // to change the horizontal axis
+            }
+        }
+    };
+
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
+</script>
+
+<script src="https://unpkg.com/compromise"></script>
+<script>
+    var t = window.nlp('dinosaur').nouns().toPlural()
+    console.log(t.out('text'))
+    var sentence = "The big, red ball bounced down the street.";
+    var adjectives = nlp(sentence).adjectives().out('array');
+    console.log(adjectives);
 </script>
