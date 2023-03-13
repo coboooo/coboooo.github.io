@@ -139,14 +139,48 @@
     <input type="text" class="form-control" id="input3">
 </div>
 <script>
-// Get all cookies
-const cookies = document.cookie.split(';');
+    // Get all cookies
+    const cookies = document.cookie.split(';');
 
-// Loop through cookies and log each one
-for (let i = 0; i < cookies.length; i++) {
-  const cookie = cookies[i].trim();
-  console.log(cookie);
-}
+    // Loop through cookies and log each one
+    for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        console.log(cookie);
+    }
 
 </script>
 
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+<form id="login-form">
+    <input required maxlength="15" type="text" placeholder="What is your name?" />
+    <input type="submit" value="Log In" />
+</form>
+<h1 id="greeting" class="hidden"></h1>
+
+<script>
+    const loginForm = document.querySelector("#login-form");
+    const loginInput = document.querySelector("#login-form input");
+    const loginButton = document.querySelector("#login-form button");
+    const greeting = document.querySelector("#greeting");
+
+    function onLoginBtnClick() {
+        const HIDDEN_CLASSNAME = "hidden";
+
+        function onLoginSubmit(event) {
+            event.preventDefault();
+            loginForm.classList.add(HIDDEN_CLASSNAME);
+            const username = loginInput.value;
+            console.log(username);
+            greeting.innerText = `Hello ${username}`;
+            greeting.classList.remove(HIDDEN_CLASSNAME);
+        }
+
+        loginButton.addEventListener("click", onLoginBtnClick);
+        loginForm.addEventListener("submit", onLoginSubmit);
+    }
+</script>
