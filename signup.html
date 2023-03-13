@@ -46,80 +46,42 @@
 </head>
 
 <body>
-
-    <span class="ms-auto mx-2" id="emailshow"></span>
-    <span class="ms-auto mx-2" id="userName"></span>
-    <div class="bucket mt-3">
+    <div class="container mt-3">
         <div class="mb-3">
-            <input type="email" class="form-control" placeholder="email" id="email">
+            <input type="text" class="form-control" placeholder="name" id="name-new">
         </div>
         <div class="mb-3">
-            <input type="password" class="form-control" placeholder="pw" id="pw">
+            <input type="email" class="form-control" placeholder="email" id="email-new">
         </div>
-        <button type="submit" class="btn btn-primary" id="login">로그인하기</button>
+        <div class="mb-3">
+            <input type="password" class="form-control" placeholder="pw" id="pw-new">
+        </div>
+        <button type="submit" class="btn btn-primary" id="register">가입하기</button>
     </div>
-    <br>
-    <button id="logout" style="display:none;">로그아웃</button>
-
-    <br>
-    <button id="allDelete" class="allDelete">allDelete</button>
-    <div class="container mt-3"></div>
-    <div class="test"></div>
-
-    <input type="text" id="search" autofocus>
-    <div class="result">1</div>
-
 </body>
 
 <script>
+    // Sign up with password
+    $('#register').click(function () {
 
+        var 이메일 = $('#email-new').val();
+        var 패스워드 = $('#pw-new').val();
+        var 이름 = $('#name-new').val();
+
+        firebase.auth().createUserWithEmailAndPassword(이메일, 패스워드).then((result) => {
+
+            // var userData = { name: 이름, email: 이메일 }
+            db.collection('user').doc(result.user.uid).set({ name: 이름, email: 이메일 })
+
+            result.user.updateProfile({ displayName: 이름 })
+            console.log(result.user)
+            window.location.href = 'index.html';
+        })
+    })
 
 </script>
 
 <script>
-
-    const collectionRef = db.collection("product");
-
-    $('#login').click(function () {
-        var 이메일 = $('#email').val();
-        var 패스워드 = $('#pw').val();
-        firebase.auth().signInWithEmailAndPassword(이메일, 패스워드).then((result) => {
-            // console.log(result.user)
-            $('.bucket').hide();
-            $('#logout').show();
-
-        })
-    })
-
-    var userStr = localStorage.getItem('user');
-    if (userStr) {
-        var userObj = JSON.parse(userStr);
-        $('#emailshow').html(userObj.email);
-    }
-
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log(user.email);
-            localStorage.setItem('user', JSON.stringify(user));
-            // user is logged in, hide the input window
-            $('.bucket').hide();
-            $('#logout').show();
-            $('#emailshow').html(user.email);
-        } else {
-            // user is not logged in, show the input window
-            $('.bucket').show();
-            $('#logout').hide();
-            $('#emailshow').html('');
-        }
-    });
-
-    $('#logout').click(function () {
-        firebase.auth().signOut()
-        localStorage.removeItem('user');
-        $('.bucket').show();
-        $('#logout').hide();
-        $('#userName').hide();
-    })
 
 </script>
 

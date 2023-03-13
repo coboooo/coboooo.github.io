@@ -62,13 +62,13 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                            <a class="nav-link active" aria-current="page" href="#">Home</a><input>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">About</a>
+                            <a class="nav-link" href="#">About</a><input>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="#">Contact</a><input>
                         </li>
                     </ul>
                 </div>
@@ -92,13 +92,13 @@
                 <span class="ms-auto mx-2" id="showEmail"></span>
             </div>
             <div class="col-md-4 table">
-                <br>
-                <button id="allDelete" class="btn btn-danger">Delete</button>
-                <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
-                <!-- <div class="alert alert-success success"></div> -->
-                <hr>
-                <div class="container">
+                <div class="alert alert-success success">
+                    <button id="allDelete" class="btn btn-danger">Delete</button>
+                    <button onclick="location.reload();" class="btn btn-primary">Refresh</button>
                 </div>
+                <div class="alert alert-success success"></div>
+                안녕하세요.
+                <div class="container"> </div>
             </div>
             <button class="btn btn-success submit-btn">Submit</button>
             <div class="userVocaTest"></div>
@@ -168,11 +168,12 @@
             var template = `
         <div class="container">
             <div class="row">
-                <div class="col-4 border" style="text-align: right;">${doc.data().word}</div>
-                <div class="col-4 border">
+                <div class="col-3 border" style="text-align: right;">${index+1}</div>
+                <div class="col-3 border" style="text-align: right;">${doc.data().word}</div>
+                <div class="col-3 border">
                     <input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}>
                 </div>
-                <div class="col-4 border cell3" style="display: none;">${doc.data().mean}</div>
+                <div class="col-3 border cell3" style="display: none;">${doc.data().mean}</div>
             </div>
         </div>
         `
@@ -182,14 +183,18 @@
         console.log('Error:', error);
     });
 
+
+
     db.collection('voca_test').get().then((result) => {
         result.docs.forEach((doc, index) => {
             var template = `
         <div class="container">
             <div class="row">
-                <div class="col-4 border">${doc.data().word}</div>
-                <div class="col-4 border">1</div>
-                <div class="col-4 border">1</div>
+                <div class="col-1 border">${doc.data().email}</div>
+                <div class="col-1 border">${doc.data().word}</div>
+                <div class="col-1 border">${doc.data().idea}</div>
+                <div class="col-1 border">${doc.data().mean}</div>
+                <div class="col-1 border">${doc.data().dayAndTime}</div>
             </div>
         </div>
         `
@@ -197,8 +202,6 @@
         });
     })
 
-    var inputs = document.querySelectorAll('input[type="text"]');
-    var count = 0;
     $('.table').on('blur', 'input[type="text"]', function () {
         const inputTags = document.getElementsByTagName('input');
         const totalCount = inputTags.length - 1;
@@ -213,7 +216,7 @@
 
         // create
         let email = 'emaileeee';
-        let word = 'emaileeee';
+        let word = 'word';
         let idea = $(this).val();
         let mean = 'mean';
         let dayAndTime = 'dayAndTime';
@@ -236,6 +239,7 @@
         // this.disabled = true;
         $(this).parent().siblings('.cell3').css('display', 'table-cell');
     });
+
 
     $('#allDelete').click(() => {
         db.collection('voca_list').get().then((result) => {
