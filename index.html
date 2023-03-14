@@ -43,7 +43,7 @@
             font-size: 15px;
         } */
 
-        .table-cell {
+        .cell3 {
             display: none;
         }
     </style>
@@ -70,13 +70,13 @@
     </div>
     <div class="border-primary m-2">
 
-        <table class="mainContents table table-bordered">
+        <table class="mainContents table">
             <thead class="table-light">
                 <tr>
-                    <th style="width: 10%;">1</th>
-                    <th>1</th>
-                    <th>1</th>
-                    <th>1</th>
+                    <th class="text-center" style="width: 10%;">1</th>
+                    <th class="text-center">1</th>
+                    <th class="text-center">1</th>
+                    <th class="text-center">1</th>
                 </tr>
             </thead>
         </table>
@@ -109,9 +109,9 @@
             <tbody>
                 <tr>
                     <td>${index + 1}</td>
-                    <td>${doc.data().word}</td>
+                    <td class="text-end">${doc.data().word}</td>
                     <td><input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}></td>
-                    <td>${doc.data().mean}</td>
+                    <td class="cell3">${doc.data().mean}</td>
                 </tr>
             </tbody>
             <tbody>
@@ -178,7 +178,6 @@
         // this.disabled = true;
         $(this).parent().siblings('.cell3').css('display', 'table-cell');
     });
-
 
     $('#allDelete').click(() => {
         db.collection('voca_list').get().then((result) => {
