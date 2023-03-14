@@ -65,6 +65,15 @@
         .hideAndShow {
             display: none;
         }
+
+        .wrapper {
+            display: flex;
+        }
+
+        .section {
+            flex: 1;
+            border: 0px solid black;
+        }
     </style>
 
 </head>
@@ -89,16 +98,9 @@
     </div>
     <div class="border-primary m-2">
 
-        <table class="mainContents table">
-            <thead class="table-light">
-                <tr>
-                    <th class="text-center" style="width: 10%;">1</th>
-                    <th class="text-center">1</th>
-                    <th class="text-center">1</th>
-                    <th class="text-center">1</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="mainContents">
+
+        </div>
 
     </div>
     <button class="btn btn-primary w-100" style="padding: 20px;">Full Width Button</button>
@@ -119,25 +121,18 @@
     </div>
 </div>
 
-
 <script>
     // read
     db.collection('voca_list').get().then((result) => {
         result.docs.forEach((doc, index) => {
             var template = `
-            <tbody>
-                <tr>
-                    <td>${index + 1}</td>
-                    <td class="text-end">${doc.data().word}</td>
-                    <td><input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}></td>
-                    <td class="hideAndShow">${doc.data().mean}</td>
-                </tr>
-            </tbody>
-            <tbody>
-                <tr>
-                    <td colspan="4">.</td>
-                </tr>
-            </tbody>
+            <div class="wrapper">
+                <div class="section">${index + 1}</div>
+                <div class="section">${doc.data().word}</div>
+                <div class="section"><input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}></div>
+                <div class="section hideAndShow">${doc.data().mean}</div>
+                <div class="temp hideAndShow">bbb</div>
+            </div>
                 `
             $('.mainContents').append(template);
         });
@@ -160,7 +155,7 @@
         });
     })
 
-    $('.table').on('blur', 'input[type="text"]', function () {
+    $('.mainContents').on('blur', 'input[type="text"]', function () {
         const inputTags = document.getElementsByTagName('input');
         const totalCount = inputTags.length - 1;
         console.log("🚀  totalCount", totalCount)
@@ -195,7 +190,7 @@
 
         $(this).css('background-color', 'Ivory');
         // this.disabled = true;
-        $(this).parent().siblings('.hideAndShow').css('display', 'table-cell');
+        $(this).parent().siblings('.hideAndShow').removeClass('hideAndShow');
     });
 
     // allDelete
