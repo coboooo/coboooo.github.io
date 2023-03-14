@@ -43,7 +43,26 @@
             font-size: 15px;
         } */
 
-        .cell3 {
+        .table {
+            display: table;
+            width: 100%;
+        }
+
+        .table-row {
+            display: table-row;
+        }
+
+        .table-cell {
+            display: table-cell;
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+        }
+
+        .text-end {
+            text-align: right;
+        }
+
+        .hideAndShow {
             display: none;
         }
     </style>
@@ -111,7 +130,7 @@
                     <td>${index + 1}</td>
                     <td class="text-end">${doc.data().word}</td>
                     <td><input type="text" value="" class="form-control" ${index === 0 ? 'autofocus' : ''}></td>
-                    <td class="cell3">${doc.data().mean}</td>
+                    <td class="hideAndShow">${doc.data().mean}</td>
                 </tr>
             </tbody>
             <tbody>
@@ -176,9 +195,10 @@
 
         $(this).css('background-color', 'Ivory');
         // this.disabled = true;
-        $(this).parent().siblings('.cell3').css('display', 'table-cell');
+        $(this).parent().siblings('.hideAndShow').css('display', 'table-cell');
     });
 
+    // allDelete
     $('#allDelete').click(() => {
         db.collection('voca_list').get().then((result) => {
             result.forEach((doc) => {
@@ -194,6 +214,7 @@
         });
     });
 
+    // add
     db.collection('voca_list').get().then((querySnapshot) => {
         const numDocuments = querySnapshot.size;
         if (numDocuments == 0) {
@@ -210,6 +231,9 @@
     });
 
 </script>
+
+
+
 
 
 <!-- log in -->
@@ -298,4 +322,3 @@
         options: options
     });
 </script>
-
